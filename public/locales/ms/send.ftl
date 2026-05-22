@@ -1,4 +1,4 @@
-title = Snd
+title = SND
 siteSubtitle = experimen web
 uploadPageHeader = Peribadi, Perkongsian Fail Dienkrip
 uploadPageExplainer = Hantar fail melalui pautan yang selamat, peribadi dan dienkrip, yang akan luput secara automatik untuk memastikan fail anda itu tidak terus berada dalam talian selama-lamanya.

@@ -1,4 +1,4 @@
-title = Snd
+title = SND
 importingFile = Kutora faira
 encryptingFile = Kuinikiriputa
 enableJavascript = Ndinokumbira mubvumidze JavaScript moedza zvekare
