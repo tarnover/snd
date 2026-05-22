@@ -18,7 +18,7 @@ module.exports = function(selected, options, translate, changed, htmlId) {
   return html`
     <select
       id="${htmlId}"
-      class="appearance-none cursor-pointer border-default rounded-default bg-grey-10 hover:border-primary focus:border-primary pl-1 pr-8 py-1 my-1 h-8 dark:bg-grey-80"
+      class="snd-select"
       data-selected="${selected}"
       onchange="${choose}"
     >

@@ -293,3 +293,20 @@ send-upload-area { display: block; }
 .snd-password-form .snd-input { flex: 1; }
 .snd-password-form.is-invalid .snd-input { border-bottom-color: var(--snd-danger); }
 .is-hidden { visibility: hidden; }
+
+/* Select / expiry controls */
+.snd-select {
+  font: 400 12px var(--snd-font-mono);
+  background: rgba(232, 230, 223, 0.05);
+  color: var(--snd-text);
+  border: 1px solid var(--snd-line);
+  padding: 6px 10px;
+  border-radius: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.snd-select:focus { outline: 2px solid var(--snd-accent); outline-offset: 2px; }
+
+.snd-expiry-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }

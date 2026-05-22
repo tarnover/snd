@@ -5,7 +5,7 @@ const selectbox = require('./selectbox');
 
 module.exports = function(state, emit) {
   const el = html`
-    <div class="px-1">
+    <div class="snd-expiry-row snd-body-sm snd-text-mute">
       ${raw(
         state.translate('archiveExpiryInfo', {
           downloadCount:
