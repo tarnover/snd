@@ -21,7 +21,7 @@ class Footer extends Component {
 
       if (WEB_UI.FOOTER_DONATE_URL != '') {
         links.push(html`
-          <li class="m-2">
+          <li class="snd-footer-item">
             <a href="${WEB_UI.FOOTER_DONATE_URL}" target="_blank">
               ${translate('footerLinkDonate')}
             </a>
@@ -30,7 +30,7 @@ class Footer extends Component {
       }
       if (WEB_UI.FOOTER_CLI_URL != '') {
         links.push(html`
-          <li class="m-2">
+          <li class="snd-footer-item">
             <a href="${WEB_UI.FOOTER_CLI_URL}" target="_blank">
               ${translate('footerLinkCli')}
             </a>
@@ -39,7 +39,7 @@ class Footer extends Component {
       }
       if (WEB_UI.FOOTER_DMCA_URL != '') {
         links.push(html`
-          <li class="m-2">
+          <li class="snd-footer-item">
             <a href="${WEB_UI.FOOTER_DMCA_URL}" target="_blank">
               ${translate('footerLinkDmca')}
             </a>
@@ -48,7 +48,7 @@ class Footer extends Component {
       }
       if (WEB_UI.FOOTER_SOURCE_URL != '') {
         links.push(html`
-          <li class="m-2">
+          <li class="snd-footer-item">
             <a href="${WEB_UI.FOOTER_SOURCE_URL}" target="_blank">
               ${translate('footerLinkSource')}
             </a>
@@ -57,7 +57,7 @@ class Footer extends Component {
       }
     } else {
       links.push(html`
-        <li class="m-2">
+        <li class="snd-footer-item">
           <a href="https://github.com/tarnover/send" target="_blank">
             ${translate('footerLinkSource')}
           </a>
@@ -72,7 +72,7 @@ class Footer extends Component {
 
       if (WEB_UI.CUSTOM_FOOTER_URL != '' && WEB_UI.CUSTOM_FOOTER_TEXT != '') {
         footer.push(html`
-          <li class="m-2">
+          <li class="snd-footer-item">
             <a href="${WEB_UI.CUSTOM_FOOTER_URL}" target="_blank">
               ${WEB_UI.CUSTOM_FOOTER_TEXT}
             </a>
@@ -81,7 +81,7 @@ class Footer extends Component {
       }
       else if (WEB_UI.CUSTOM_FOOTER_URL != '') {
         footer.push(html`
-          <li class="m-2">
+          <li class="snd-footer-item">
             <a href="${WEB_UI.CUSTOM_FOOTER_URL}" target="_blank">
               ${WEB_UI.CUSTOM_FOOTER_URL}
             </a>
@@ -90,14 +90,14 @@ class Footer extends Component {
       }
       else if (WEB_UI.CUSTOM_FOOTER_TEXT != '') {
         footer.push(html`
-          <li class="m-2">
+          <li class="snd-footer-item">
             ${WEB_UI.CUSTOM_FOOTER_TEXT}
           </li>
         `)
       }
       else  {
         footer.push(html`
-          <li class="m-2">
+          <li class="snd-footer-item">
             Sponsored by
             <a href="https://thirdkey.ai" target="_blank" rel="noopener noreferrer">thirdkey.ai</a>
           </li>
@@ -106,17 +106,11 @@ class Footer extends Component {
     }
 
     return html`
-      <footer
-        class="flex flex-col md:flex-row items-start w-full flex-none self-start p-6 md:p-8 font-medium text-xs text-grey-60 dark:text-grey-40 md:items-center justify-between"
-      >
-        <ul
-          class="flex flex-col md:flex-row items-start md:items-center md:justify-start"
-        >
+      <footer class="snd-footer">
+        <ul class="snd-footer-list">
           ${footer}
         </ul>
-        <ul
-          class="flex flex-col md:flex-row items-start md:items-center md:justify-end"
-        >
+        <ul class="snd-footer-list">
           ${links}
         </ul>
       </footer>

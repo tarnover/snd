@@ -172,3 +172,23 @@ html, body {
   background: var(--snd-bg);
   color: var(--snd-text);
 }
+
+/* Footer */
+.snd-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  border-top: 1px solid var(--snd-line);
+  background: var(--snd-bg);
+  color: var(--snd-mute);
+  font: 400 11px var(--snd-font-mono);
+}
+.snd-footer-list { display: flex; flex-direction: row; gap: 24px; list-style: none; margin: 0; padding: 0; }
+.snd-footer-item a { color: var(--snd-mute); text-decoration: none; }
+.snd-footer-item a:hover { color: var(--snd-text); }
+@media (max-width: 768px) {
+  .snd-footer { flex-direction: column; gap: 8px; padding: 12px 16px; }
+  .snd-footer-list { flex-direction: column; gap: 4px; }
+}
