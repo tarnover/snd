@@ -17,7 +17,7 @@ module.exports = function() {
           Tell us what you think.
         </h1>
         <p class="snd-body snd-text-mute" style="margin-bottom:16px">
-          Love Send? Take a quick survey to let us know how we can make it
+          Love SND? Take a quick survey to let us know how we can make it
           better.
         </p>
         <a
