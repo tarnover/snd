@@ -110,3 +110,44 @@ html, body {
 
 /* Square everything by default for snd-* containers */
 .snd-card, .snd-btn, .snd-input, .snd-dropzone { border-radius: 0; }
+
+/* Nav */
+.snd-nav {
+  height: 64px;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--snd-line);
+  background: var(--snd-bg);
+  z-index: 20;
+}
+.snd-brand { gap: 12px; text-decoration: none; color: var(--snd-text); }
+.snd-brand-mark { display: inline-flex; align-items: center; }
+.snd-brand-word { color: var(--snd-text); letter-spacing: 0.02em; }
+
+.snd-nav-items { gap: 24px; }
+.snd-nav-item {
+  font: 400 12px var(--snd-font-mono);
+  color: var(--snd-mute);
+  padding: 22px 0;
+  border-bottom: 1px solid transparent;
+  text-decoration: none;
+}
+.snd-nav-item:hover { color: var(--snd-text); }
+.snd-nav-item.is-active { color: var(--snd-text); border-bottom-color: var(--snd-accent); }
+
+.snd-nav-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--snd-mute);
+}
+.snd-status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--snd-accent);
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .snd-nav { padding: 0 16px; }
+  .snd-nav-items { display: none; }
+}
