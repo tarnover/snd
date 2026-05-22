@@ -1,3 +1,4 @@
+const html = require('choo/html');
 const raw = require('choo/html/raw');
 const qrcode = require('../qrcode');
 
@@ -6,5 +7,10 @@ module.exports = function(url) {
   gen.addData(url);
   gen.make();
   const qr = gen.createSvgTag({ scalable: true });
-  return raw(qr);
+  return html`
+    <div class="snd-qr-card">
+      ${raw(qr)}
+      <p class="snd-qr-url">${url}</p>
+    </div>
+  `;
 };

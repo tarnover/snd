@@ -1,3 +1,4 @@
+title = SND
 encryptingFile = Encrypting...
 decryptingFile = Decrypting
 

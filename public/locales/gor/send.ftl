@@ -1,4 +1,4 @@
-title = Molawo
+title = SND
 siteSubtitle = web yimontalo
 uploadPageLearnMore = Pobalajariya po'olo
 uploadPageBrowseButton = Tulawota berkas to delomo komputermu

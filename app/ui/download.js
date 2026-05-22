@@ -22,7 +22,7 @@ function downloading(state, emit) {
     <div
       class="flex flex-col w-full h-full items-center md:justify-center md:-mt-8"
     >
-      <h1 class="text-3xl font-bold mb-4">
+      <h1 class="snd-display">
         ${state.translate('downloadingTitle')}
       </h1>
       ${archiveTile.downloading(state, emit)}
@@ -38,12 +38,10 @@ function preview(state, emit) {
     <div
       class="flex flex-col w-full max-w-md h-full mx-auto items-center justify-center"
     >
-      <h1 class="text-3xl font-bold mb-4">
+      <h1 class="snd-display">
         ${state.translate('downloadTitle')}
       </h1>
-      <p
-        class="w-full text-grey-80 text-center leading-normal dark:text-grey-40"
-      >
+      <p class="snd-body snd-text-mute w-full text-center">
         ${state.translate('downloadDescription')}
       </p>
       ${archiveTile.preview(state, emit)}
@@ -84,11 +82,9 @@ module.exports = function(state, emit) {
     content = downloadPassword(state, emit);
   }
   return html`
-    <main class="main">
+    <main class="snd-main snd-main--centered">
       ${state.modal && modal(state, emit)}
-      <section
-        class="relative h-full w-full p-6 md:p-8 md:rounded-xl md:shadow-big"
-      >
+      <section class="snd-recipient">
         ${content}
       </section>
     </main>

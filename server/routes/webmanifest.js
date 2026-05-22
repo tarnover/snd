@@ -4,8 +4,8 @@ module.exports = async function(req, res) {
   const appState = await state(req);
 
   const manifest = {
-    name: 'Snd',
-    short_name: 'Snd',
+    name: 'SND',
+    short_name: 'SND',
     lang: req.language,
     icons: [
       {

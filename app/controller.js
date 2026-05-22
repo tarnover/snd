@@ -37,7 +37,7 @@ export default function(state, emitter) {
     document.addEventListener('blur', () => (updateTitle = true));
     document.addEventListener('focus', () => {
       updateTitle = false;
-      emitter.emit('DOMTitleChange', 'Snd');
+      emitter.emit('DOMTitleChange', 'SND');
       faviconProgressbar.updateFavicon(0);
     });
     checkFiles();

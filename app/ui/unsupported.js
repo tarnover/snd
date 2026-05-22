@@ -10,7 +10,7 @@ module.exports = function(state, emit) {
     strings = unsupportedStrings(state);
     why = html`
       <a
-        class="text-primary"
+        class="snd-text-accent"
         href="https://github.com/timvisee/send/blob/master/docs/faq.md#why-is-my-browser-not-supported"
       >
         ${state.translate('notSupportedLink')}
@@ -24,15 +24,13 @@ module.exports = function(state, emit) {
   }
 
   return html`
-    <main class="main">
+    <main class="snd-main snd-main--centered">
       ${state.modal && modal(state, emit)}
-      <section
-        class="flex flex-col items-center justify-center text-center bg-white m-6 px-6 py-8 border-default border-grey-30 md:border-none md:px-12 md:py-16 shadow-default w-full md:h-full dark:bg-grey-90"
-      >
-        <h1 class="text-3xl font-bold">${strings.header}</h1>
-        <p class="mt-4 mb-8 max-w-md leading-normal">${strings.description}</p>
+      <section class="snd-recipient flex flex-col items-center text-center">
+        <h1 class="snd-display">${strings.header}</h1>
+        <p class="snd-body snd-text-mute mt-4 mb-8 max-w-md leading-normal">${strings.description}</p>
         ${why}
-        <a href="${url}" class="btn rounded-lg mt-8 px-8">
+        <a href="${url}" class="snd-btn snd-btn--primary mt-8 px-8">
           ${strings.button}
         </a>
       </section>

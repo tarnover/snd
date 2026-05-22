@@ -8,30 +8,30 @@ module.exports = function(state, emit) {
     <div
       class="flex flex-col w-full max-w-md h-full mx-auto items-center justify-center"
     >
-      <h1 class="mb-4 text-3xl font-bold">${state.translate(
+      <h1 class="snd-display mb-4">${state.translate(
         'downloadTitle'
       )}</h1>
       <p
-        class="w-full p-2 border-default border-yellow-50 rounded-default md:w-4/5 text-orange-60 bg-yellow-40 text-center leading-normal"
+        class="snd-body snd-text-mute w-full p-2 text-center leading-normal"
       >
         ⚠️ ${state.translate('noStreamsWarning')} ⚠️
       </p>
       <form class="md:w-128" onsubmit=${submit}>
-        <fieldset class="border-default rounded-default p-4 my-4" onchange=${optionChanged}>
+        <fieldset class="p-4 my-4" onchange=${optionChanged}>
           <div class="flex items-center mb-2">
             <svg class="h-8 w-6 mr-3 flex-shrink-0 text-primary">
               <use xlink:href="${assets.get('blue_file.svg')}#icon"/>
             </svg>
             <p class="flex-grow">
-              <h1 class="text-base font-medium word-break-all">${
+              <h1 class="snd-body word-break-all">${
                 archive.name
               }</h1>
-              <div class="text-sm font-normal opacity-75 pt-1">${bytes(
+              <div class="snd-code-sm pt-1">${bytes(
                 archive.size
               )}</div>
             </p>
           </div>
-          <div class=" mt-6 mb-3">
+          <div class="mt-6 mb-3">
             <input class="mx-2" type="radio" name="gus" id="copy" value="copy" checked>
             <label class="" for="copy">${state.translate(
               'noStreamsOptionCopy'
@@ -51,12 +51,12 @@ module.exports = function(state, emit) {
           </div>
         </fieldset>
         <input
-            class="btn rounded-lg w-full flex flex-shrink-0 items-center justify-center"
+            class="snd-btn snd-btn--primary w-full flex flex-shrink-0 items-center justify-center"
             value="${state.translate('copyLinkButton')}"
             title="${state.translate('copyLinkButton')}"
             type="submit" />
             <p
-          class="text-grey-80 leading-normal dark:text-grey-40 font-semibold text-center md:my-8 md:text-left"
+          class="snd-body snd-text-mute leading-normal font-semibold text-center md:my-8 md:text-left"
         >
           ${state.translate('downloadConfirmDescription')}
         </p>

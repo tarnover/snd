@@ -21,9 +21,7 @@ module.exports = function(state, emit) {
 
   if (archives.length > 0 && state.WEB_UI.UPLOADS_LIST_NOTICE_HTML) {
     archives.push(html`
-      <p
-        class="w-full p-2 border-default dark:border-grey-70 rounded-default text-orange-60 bg-yellow-40 text-center leading-normal"
-      >
+      <p class="snd-notice w-full text-center">
         ${raw(state.WEB_UI.UPLOADS_LIST_NOTICE_HTML)}
       </p>
     `);
@@ -34,7 +32,7 @@ module.exports = function(state, emit) {
   if (archives.length > 0 && state.WEB_UI.SHOW_THUNDERBIRD_SPONSOR) {
     archives.push(html`
       <a
-        class="w-full p-2 border-default dark:border-grey-70 rounded-default text-orange-60 bg-yellow-40 text-center leading-normal d-block"
+        class="snd-notice w-full text-center"
         href="https://www.thunderbird.net/"
       >
         <svg
@@ -60,13 +58,11 @@ module.exports = function(state, emit) {
       : list(archives, 'p-2 h-full overflow-y-auto w-full', 'mb-4 w-full');
 
   return html`
-    <main class="main">
+    <main class="snd-main">
       ${state.modal && modal(state, emit)}
-      <section
-        class="h-full w-full p-6 md:p-8 overflow-hidden md:flex md:flex-row md:rounded-xl md:shadow-big"
-      >
-        <div class="px-2 w-full md:px-0 md:mr-8 md:w-1/2">${left}</div>
-        <div class="mt-6 w-full md:w-1/2 md:-m-2">${right}</div>
+      <section class="snd-home-grid">
+        <div class="snd-home-left">${left}</div>
+        <div class="snd-home-right">${right}</div>
       </section>
     </main>
   `;

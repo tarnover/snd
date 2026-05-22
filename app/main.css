@@ -1,3 +1,5 @@
+@import './ui/tokens.css';
+
 @tailwind base;
 
 html {
@@ -6,16 +8,8 @@ html {
 
 @tailwind components;
 
-:not(input) {
+:not(input, textarea) {
   user-select: none;
-}
-
-:root {
-  --violet-gradient: linear-gradient(
-    -180deg,
-    rgb(144 89 255 / 80%) 0%,
-    rgb(144 89 255 / 40%) 100%
-  );
 }
 
 a {
@@ -27,30 +21,22 @@ a:focus {
   outline: 1px dotted grey;
 }
 
-body {
-  background-image: url('../assets/bg.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  overflow-x: hidden;
+.btn { /* legacy alias — removed once all templates migrate */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 400 12px var(--snd-font-mono);
+  letter-spacing: 0.02em;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  background: var(--snd-accent);
+  color: var(--snd-accent-text);
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 0;
+  transition: background-color 120ms ease;
 }
-
-.btn {
-  @apply bg-primary;
-  @apply text-white;
-  @apply cursor-pointer;
-  @apply py-4;
-  @apply px-6;
-  @apply font-semibold;
-}
-
-.btn:hover {
-  @apply bg-primary_accent;
-}
-
-.btn:focus {
-  @apply bg-primary_accent;
-}
+.btn:hover { background: #b8dcb8; }
 
 .checkbox {
   @apply leading-normal;
@@ -212,51 +198,6 @@ progress::-webkit-progress-bar {
   @apply h-1;
 }
 
-progress::-webkit-progress-value {
-  /* stylelint-disable */
-  background-image: -webkit-linear-gradient(
-      -45deg,
-      transparent 20%,
-      rgb(255 255 255 / 40%) 20%,
-      rgb(255 255 255 / 40%) 40%,
-      transparent 40%,
-      transparent 60%,
-      rgb(255 255 255 / 40%) 60%,
-      rgb(255 255 255 / 40%) 80%,
-      transparent 80%
-    ),
-    -webkit-linear-gradient(left, var(--color-primary), var(--color-primary));
-  /* stylelint-enable */
-  border-radius: 2px;
-  background-size: 21px 20px, 100% 100%, 100% 100%;
-}
-
-progress::-moz-progress-bar {
-  /* stylelint-disable */
-  background-image: -moz-linear-gradient(
-      135deg,
-      transparent 20%,
-      rgb(255 255 255 / 40%) 20%,
-      rgb(255 255 255 / 40%) 40%,
-      transparent 40%,
-      transparent 60%,
-      rgb(255 255 255 / 40%) 60%,
-      rgb(255 255 255 / 40%) 80%,
-      transparent 80%
-    ),
-    -moz-linear-gradient(left, var(--color-primary), var(--color-primary));
-  /* stylelint-enable */
-  border-radius: 2px;
-  background-size: 21px 20px, 100% 100%, 100% 100%;
-  animation: animate-stripes 1s linear infinite;
-}
-
-@keyframes animate-stripes {
-  100% {
-    background-position: -21px 0;
-  }
-}
-
 select {
   background-image: url('../assets/select-arrow.svg');
   background-position: calc(100% - 0.75rem);
@@ -327,17 +268,6 @@ select {
 
 @tailwind utilities;
 
-@responsive {
-  .shadow-light {
-    box-shadow: 0 0 8px 0 rgb(12 12 13 / 10%);
-  }
-
-  .shadow-big {
-    box-shadow: 0 12px 18px 2px rgb(34 0 51 / 4%),
-      0 6px 22px 4px rgb(7 48 114 / 12%), 0 6px 10px -4px rgb(14 13 26 / 12%);
-  }
-}
-
 @variants focus {
   .outline {
     outline: 1px dotted grey;
@@ -351,7 +281,6 @@ select {
 
 .signin {
   backface-visibility: hidden;
-  border-radius: 6px;
   transition-property: transform, background-color;
   transition-duration: 250ms;
   transition-timing-function: cubic-bezier(0.07, 0.95, 0, 1);
@@ -395,8 +324,6 @@ select {
 .white-violet:focus {
   @apply bg-violet;
   @apply text-white;
-
-  background-image: var(--violet-gradient);
 }
 
 .violet {
@@ -406,7 +333,7 @@ select {
 
 .violet:hover,
 .violet:focus {
-  background-image: var(--violet-gradient);
+  @apply bg-violet;
 }
 
 /* end signin button color experiment */
