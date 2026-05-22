@@ -249,3 +249,21 @@ send-upload-area { display: block; }
 /* Inline action link helper (snd-text-accent is the base color) */
 .snd-text-accent { text-decoration: none; }
 .snd-text-accent:hover { text-decoration: underline; }
+
+/* Centered main layout (download / password screens) */
+.snd-main--centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  flex: 1;
+}
+.snd-recipient {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.snd-recipient h1 { color: var(--snd-text); }
