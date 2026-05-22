@@ -267,3 +267,29 @@ send-upload-area { display: block; }
   gap: 24px;
 }
 .snd-recipient h1 { color: var(--snd-text); }
+
+/* Password-protected download screen */
+.snd-password-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  text-align: center;
+}
+.snd-password-hero { padding-bottom: 4px; }
+.snd-password-lock {
+  width: 64px; height: 64px;
+  border: 1.5px solid var(--snd-accent);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.snd-password-form {
+  display: flex; flex-direction: row; gap: 12px;
+  width: 100%; max-width: 480px;
+}
+.snd-password-form .snd-input { flex: 1; }
+.snd-password-form.is-invalid .snd-input { border-bottom-color: var(--snd-danger); }
+.is-hidden { visibility: hidden; }

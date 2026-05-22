@@ -3,57 +3,43 @@ const html = require('choo/html');
 module.exports = function(state, emit) {
   const fileInfo = state.fileInfo;
   const invalid = fileInfo.password === null;
+  const t = state.translate;
 
   const div = html`
-    <div
-      class="h-full w-full flex flex-col items-center justify-center bg-white py-8 max-w-md mx-auto dark:bg-grey-90"
-    >
-      <h1 class="text-3xl font-bold mb-4">
-        ${state.translate('downloadTitle')}
-      </h1>
-      <p
-        class="w-full mb-4 text-center text-grey-80 dark:text-grey-40 leading-normal"
-      >
-        ${state.translate('downloadDescription')}
-      </p>
-      <form
-        class="flex flex-row flex-nowrap w-full md:w-4/5"
-        onsubmit="${checkPassword}"
-        data-no-csrf
-      >
-        <input
-          id="autocomplete-decoy"
-          class="hidden"
-          type="password"
-          value="lol"
-        />
-        <input
-          id="password-input"
-          class="w-full border-l border-t border-b rounded-l-lg rounded-r-none ${invalid
-            ? 'border-red dark:border-red-40'
-            : 'border-grey'} leading-loose px-2 py-1 dark:bg-grey-80"
-          maxlength="4096"
-          autocomplete="off"
-          placeholder="${state.translate('unlockInputPlaceholder')}"
-          oninput="${inputChanged}"
-          type="password"
-        />
-        <input
-          type="submit"
-          id="password-btn"
-          class="btn rounded-r-lg rounded-l-none ${invalid
-            ? 'bg-red hover:bg-red focus:bg-red dark:bg-red-40'
-            : ''}"
-          value="${state.translate('unlockButtonLabel')}"
-          title="${state.translate('unlockButtonLabel')}"
-        />
+    <div class="snd-password-screen">
+      <div class="snd-password-hero" aria-hidden="true">
+        <div class="snd-password-lock">
+          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="var(--snd-accent)" stroke-width="1.5">
+            <rect x="4" y="11" width="16" height="10"/>
+            <path d="M8 11 V7 a4 4 0 0 1 8 0 V11"/>
+          </svg>
+        </div>
+      </div>
+      <p class="snd-tag">PASSWORD-PROTECTED</p>
+      <h1 class="snd-display">${t('downloadTitle')}</h1>
+      <p class="snd-body-sm">${t('downloadDescription')}</p>
+
+      <form class="snd-password-form ${invalid ? 'is-invalid' : ''}"
+            onsubmit="${checkPassword}" data-no-csrf>
+        <input id="autocomplete-decoy" type="password" value="lol" style="display:none"/>
+        <input id="password-input"
+               class="snd-input snd-input--mask"
+               maxlength="4096"
+               autocomplete="off"
+               placeholder="${t('unlockInputPlaceholder')}"
+               oninput="${inputChanged}"
+               type="password"/>
+        <input type="submit"
+               id="password-btn"
+               class="snd-btn snd-btn--primary"
+               value="${t('unlockButtonLabel')}"
+               title="${t('unlockButtonLabel')}"/>
       </form>
-      <label
-        id="password-error"
-        class="${invalid ? '' : 'invisible'} text-red dark:text-red-40 my-4"
-        for="password-input"
-      >
-        ${state.translate('passwordTryAgain')}
+
+      <label id="password-error"
+             class="snd-caption snd-text-danger ${invalid ? '' : 'is-hidden'}"
+             for="password-input">
+        ${t('passwordTryAgain')}
       </label>
     </div>
   `;
@@ -65,17 +51,8 @@ module.exports = function(state, emit) {
   function inputChanged(event) {
     event.stopPropagation();
     event.preventDefault();
-    const label = document.getElementById('password-error');
-    const input = document.getElementById('password-input');
-    const btn = document.getElementById('password-btn');
-    label.classList.add('invisible');
-    input.classList.remove('border-red', 'dark:border-red-40');
-    btn.classList.remove(
-      'bg-red',
-      'hover:bg-red',
-      'focus:bg-red',
-      'dark:bg-red-40'
-    );
+    document.getElementById('password-error').classList.add('is-hidden');
+    document.querySelector('.snd-password-form').classList.remove('is-invalid');
   }
 
   function checkPassword(event) {
@@ -85,7 +62,6 @@ module.exports = function(state, emit) {
     const password = el.value;
     if (password.length > 0) {
       document.getElementById('password-btn').disabled = true;
-      // Strip any url parameters between fileId and secretKey
       const fileInfoUrl = window.location.href.replace(/\?.+#/, '#');
       state.fileInfo.url = fileInfoUrl;
       state.fileInfo.password = password;
