@@ -18,8 +18,9 @@ module.exports = async function(req, res) {
   if (
     authParts.length !== 2 ||
     authParts[0] !== 'send-v1' ||
-    !/^[A-Za-z0-9+/]+={0,2}$/.test(authParts[1])
+    !/^[A-Za-z0-9+/_-]+={0,2}$/.test(authParts[1])
   ) {
+    log.error('upload.authFormat', { scheme: authParts[0] });
     return res.sendStatus(400);
   }
   const owner = crypto.randomBytes(10).toString('hex');
