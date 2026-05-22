@@ -219,3 +219,8 @@ html, body {
   font: 400 13px var(--snd-font-sans);
   background: rgba(214, 138, 120, 0.05);
 }
+
+/* Intro section */
+.snd-intro { display: flex; flex-direction: column; gap: 16px; padding: 8px 0; max-width: 480px; }
+.snd-intro-title { color: var(--snd-text); }
+.snd-intro-body { color: var(--snd-mute); }
