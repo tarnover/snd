@@ -1,3 +1,5 @@
+@import './ui/tokens.css';
+
 @tailwind base;
 
 html {
@@ -6,16 +8,8 @@ html {
 
 @tailwind components;
 
-:not(input) {
+:not(input):not(textarea) {
   user-select: none;
-}
-
-:root {
-  --violet-gradient: linear-gradient(
-    -180deg,
-    rgb(144 89 255 / 80%) 0%,
-    rgb(144 89 255 / 40%) 100%
-  );
 }
 
 a {
@@ -27,30 +21,22 @@ a:focus {
   outline: 1px dotted grey;
 }
 
-body {
-  background-image: url('../assets/bg.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  overflow-x: hidden;
+.btn { /* legacy alias — removed once all templates migrate */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 400 12px var(--snd-font-mono);
+  letter-spacing: 0.02em;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  background: var(--snd-accent);
+  color: var(--snd-accent-text);
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 0;
+  transition: background-color 120ms ease;
 }
-
-.btn {
-  @apply bg-primary;
-  @apply text-white;
-  @apply cursor-pointer;
-  @apply py-4;
-  @apply px-6;
-  @apply font-semibold;
-}
-
-.btn:hover {
-  @apply bg-primary_accent;
-}
-
-.btn:focus {
-  @apply bg-primary_accent;
-}
+.btn:hover { background: #b8dcb8; }
 
 .checkbox {
   @apply leading-normal;
