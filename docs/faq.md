@@ -23,10 +23,14 @@ Send uses JavaScript to:
 
 - Encrypt and decrypt files locally on the client instead of the server.
 - Render the user interface.
-- Manage translations on the website into [various different languages](https://github.com/timvisee/send#localization).
-- Collect data to help us improve Send in accordance with our [Terms & Privacy](https://send.firefox.com/legal).
+- Manage translations on the website into [various different languages](https://github.com/tarnover/send#localization).
+- (Original upstream only) Collect data in accordance with the operator's stated terms. This fork does not ship any analytics or telemetry. Each operator is responsible for documenting their own privacy practices.
 
-Since Send is an open source project, you can see all of the cool ways we use JavaScript by [examining our code](https://github.com/timvisee/send/).
+Since Send is an open-source project, you can read the source at <https://github.com/tarnover/send>.
+
+## Is there a command-line client?
+
+Yes — [`ffsend`](https://github.com/timvisee/ffsend), built by Tim Visee, is a fully-featured CLI that speaks the Send protocol. It can upload, download, set/clear passwords, change params, and delete shares. It is the recommended client for any sensitive workflow because, unlike the web UI, it doesn't trust the operator to ship correct JavaScript.
 
 ## How long are files available for?
 
