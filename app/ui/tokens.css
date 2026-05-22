@@ -165,3 +165,10 @@ html, body {
 @media (max-width: 768px) {
   .snd-statusbar { padding: 10px 16px; height: auto; flex-direction: column; gap: 4px; }
 }
+
+/* Body shell */
+.snd-body-shell {
+  min-height: 100vh;
+  background: var(--snd-bg);
+  color: var(--snd-text);
+}
