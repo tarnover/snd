@@ -224,3 +224,28 @@ html, body {
 .snd-intro { display: flex; flex-direction: column; gap: 16px; padding: 8px 0; max-width: 480px; }
 .snd-intro-title { color: var(--snd-text); }
 .snd-intro-body { color: var(--snd-mute); }
+
+/* Progress bar (used inline and in tiles) */
+progress.snd-progress { -webkit-appearance: none; appearance: none; width: 100%; height: 1px; background: var(--snd-line); border: 0; }
+progress.snd-progress::-webkit-progress-bar { background: var(--snd-line); }
+progress.snd-progress::-webkit-progress-value { background: var(--snd-accent); }
+progress.snd-progress::-moz-progress-bar { background: var(--snd-accent); }
+
+/* Archive tile (list item on My Uploads) */
+send-archive {
+  display: block;
+  border: 1px solid var(--snd-line);
+  padding: 16px 20px;
+  background: transparent;
+}
+send-archive + send-archive { margin-top: 8px; }
+
+/* Inline file info row */
+send-file { display: flex; align-items: center; padding: 12px 0; }
+
+/* Upload area */
+send-upload-area { display: block; }
+
+/* Inline action link helper (snd-text-accent is the base color) */
+.snd-text-accent { text-decoration: none; }
+.snd-text-accent:hover { text-decoration: underline; }
