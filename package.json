@@ -28,8 +28,6 @@
     "test:backend": "nyc --reporter=lcovonly mocha --reporter=min test/backend",
     "test:frontend": "cross-env NODE_ENV=development node test/frontend/runner.js",
     "test:report": "nyc report --reporter=html",
-    "test-integration": "cross-env NODE_ENV=development wdio test/wdio.docker.conf.js",
-    "circleci-test-integration": "echo 'webdriverio tests need to be updated to node 12'",
     "start": "npm run clean && cross-env NODE_ENV=development L10N_DEV=true BASE_URL=http://localhost:8080 DETECT_BASE_URL=true webpack-dev-server --mode=development",
     "prod": "node server/bin/prod.js"
   },
@@ -147,7 +145,6 @@
     "node-fetch": "^2.7.0",
     "redis": "^3.1.2",
     "redis-mock": "^0.56.3",
-    "selenium-standalone": "^6.24.0",
     "ua-parser-js": "^0.7.41"
   },
   "overrides": {

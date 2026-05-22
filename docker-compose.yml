@@ -2,7 +2,7 @@ version: "3"
 services:
   web:
     build: .
-    links:
+    depends_on:
       - redis
     ports:
       - "1443:1443"
@@ -10,10 +10,3 @@ services:
       - REDIS_HOST=redis
   redis:
     image: redis:alpine
-  selenium-firefox:
-    image: b4handjr/selenium-firefox
-    ports:
-      - "${VNC_PORT:-5900}:5900"
-    shm_size: 2g
-    volumes:
-      - .:/code
