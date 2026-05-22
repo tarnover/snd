@@ -3,12 +3,12 @@ const html = require('choo/html');
 module.exports = function(message) {
   return function(state, emit, close) {
     return html`
-      <send-ok-dialog class="flex flex-col max-w-sm p-4 m-auto">
-        <h2 class="text-center text-xl font-bold m-8 leading-normal">
+      <send-ok-dialog class="flex flex-col">
+        <h2 class="snd-display" style="text-align:center;margin-bottom:24px">
           ${message}
         </h2>
         <button
-          class="btn rounded-lg w-full flex-shrink-0"
+          class="snd-btn snd-btn--primary snd-btn--full"
           onclick="${close}"
           title="${state.translate('okButton')}"
         >
