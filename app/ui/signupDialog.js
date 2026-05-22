@@ -8,15 +8,17 @@ module.exports = function() {
     let submitting = false;
     return html`
       <send-signup-dialog
-        class="flex flex-col justify-center my-16 md:my-0 px-8 md:px-24 w-full h-full"
+        class="flex flex-col justify-center w-full"
+        style="padding:32px 0"
       >
-        <img src="${assets.get('master-logo.svg')}" class="h-16 mt-1 mb-4" />
-        <section class="flex flex-col flex-shrink-0 self-center">
-          <h1 class="text-3xl font-bold text-center">
+        <img src="${assets.get('master-logo.svg')}" class="h-16" style="margin-bottom:16px" />
+        <section class="flex flex-col flex-shrink-0 self-center" style="margin-bottom:16px">
+          <h1 class="snd-display" style="text-align:center;margin-bottom:16px">
             ${state.translate('accountBenefitTitle')}
           </h1>
           <ul
-            class="leading-normal list-disc text-grey-80 my-2 mt-4 pl-4 md:self-center dark:text-grey-40"
+            class="snd-body snd-text-mute"
+            style="list-style:disc;padding-left:20px;margin:0"
           >
             <li>
               ${state.translate('accountBenefitLargeFiles', {
@@ -30,16 +32,17 @@ module.exports = function() {
             <li>${state.translate('accountBenefitSync')}</li>
           </ul>
         </section>
-        <section class="flex flex-col flex-grow m-4 md:self-center md:w-128">
+        <section class="flex flex-col flex-grow" style="align-self:center;width:100%;max-width:480px">
           <form onsubmit=${submitEmail} data-no-csrf>
             <input
               id="email-input"
               type="email"
-              class="hidden border-default rounded-lg w-full px-2 py-1 h-12 mb-3 text-lg text-grey-70 leading-loose dark:bg-grey-80 dark:text-white"
+              class="snd-input hidden"
+              style="margin-bottom:12px"
               placeholder=${state.translate('emailPlaceholder')}
             />
             <input
-              class="btn rounded-lg w-full flex flex-shrink-0 items-center justify-center"
+              class="snd-btn snd-btn--primary snd-btn--full"
               value="${state.translate('signInOnlyButton')}"
               title="${state.translate('signInOnlyButton')}"
               id="email-submit"
@@ -50,7 +53,8 @@ module.exports = function() {
             ? ''
             : html`
                 <button
-                  class="my-3 link-primary font-medium"
+                  class="snd-btn snd-btn--ghost snd-text-mute"
+                  style="margin-top:12px"
                   title="${state.translate('deletePopupCancel')}"
                   onclick=${cancel}
                 >

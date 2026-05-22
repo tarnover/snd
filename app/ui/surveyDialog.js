@@ -11,17 +11,18 @@ module.exports = function() {
     }&active_count=${state.storage.files.length}`;
     return html`
       <send-survey-dialog
-        class="flex flex-col items-center text-center p-4 max-w-sm m-auto"
+        class="flex flex-col items-center text-center"
       >
-        <h1 class="text-3xl font-bold my-4">
+        <h1 class="snd-display" style="margin-bottom:16px">
           Tell us what you think.
         </h1>
-        <p class="font-normal leading-normal text-grey-80 px-4">
+        <p class="snd-body snd-text-mute" style="margin-bottom:16px">
           Love Send? Take a quick survey to let us know how we can make it
           better.
         </p>
         <a
-          class="btn rounded-lg w-full flex-shrink-0 focus:outline my-5"
+          class="snd-btn snd-btn--primary snd-btn--full"
+          style="margin-bottom:12px"
           onclick="${() => emit('closeModal')}"
           title="Give feedback"
           href="${surveyUrl}"
@@ -30,7 +31,7 @@ module.exports = function() {
           Give feedback
         </a>
         <button
-          class="link-primary font-medium cursor-pointer focus:outline"
+          class="snd-btn snd-btn--ghost snd-text-mute"
           onclick="${close}"
           title="Skip"
         >
