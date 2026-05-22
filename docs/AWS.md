@@ -173,7 +173,7 @@ Clone repository, install JavaScript packages and compiles the assets:
 ```bash
 sudo su -l www-data -s /bin/bash
 cd /var/www/send
-git clone https://gitlab.com/timvisee/send.git .
+git clone https://github.com/tarnover/send.git .
 npm install
 npm run build
 exit
@@ -207,7 +207,7 @@ Create the file `/etc/systemd/system/send.service` with `root` user and `644` mo
 Description=Send
 After=network.target
 Requires=redis-server.service
-Documentation=https://gitlab.com/timvisee/send
+Documentation=https://github.com/tarnover/send
 
 [Service]
 Type=simple

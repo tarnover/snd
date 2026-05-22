@@ -1,25 +1,47 @@
-## Docker Quickstart
+## Docker quickstart
 
-Use `registry.gitlab.com/timvisee/send:latest` from [`timvisee/send`'s Gitlab image registry](https://gitlab.com/timvisee/send/container_registry) for the latest Docker image.
+Multi-arch images (`linux/amd64`, `linux/arm64`) are published from this
+repository to [GitHub Container Registry](https://github.com/tarnover/send/pkgs/container/send)
+on every push to `master` and on tagged releases.
 
 ```bash
-docker pull registry.gitlab.com/timvisee/send:latest
+docker pull ghcr.io/tarnover/send:latest
 
 # example quickstart (point REDIS_HOST to an already-running redis server)
 docker run -v $PWD/uploads:/uploads -p 1443:1443 \
     -e 'DETECT_BASE_URL=true' \
     -e 'REDIS_HOST=localhost' \
     -e 'FILE_DIR=/uploads' \
-    registry.gitlab.com/timvisee/send:latest
+    ghcr.io/tarnover/send:latest
 ```
 
-Or clone this repo and run `docker build -t send:latest .` to build an image locally.
+Available tags:
 
-*Note: for Docker Compose, see: https://github.com/timvisee/send-docker-compose*
+| Tag | What it points at |
+|---|---|
+| `latest` | Most recent build of `master` |
+| `master` | Same as `latest` |
+| `<short-sha>` | A specific commit on `master` |
+| `<version>` (e.g. `3.4.27`) | A tagged release |
+| `<major>.<minor>` (e.g. `3.4`) | The most recent patch in that minor line |
+| `<major>` (e.g. `3`) | The most recent release in that major line |
+
+Alternatively, the upstream
+[`timvisee/send`](https://gitlab.com/timvisee/send/container_registry) image
+is available at `registry.gitlab.com/timvisee/send:latest`. This fork stays
+protocol-compatible, so clients (browser and [`ffsend`][ffsend]) can talk to
+either.
+
+Or clone this repo and run `docker build -t send:latest .` to build an image
+locally.
+
+*Note: for Docker Compose, see <https://github.com/timvisee/send-docker-compose>.*
+
+[ffsend]: https://github.com/timvisee/ffsend
 
 ## Environment Variables
 
-All the available config options and their defaults can be found here: https://github.com/timvisee/send/blob/master/server/config.js
+All the available config options and their defaults can be found here: <https://github.com/tarnover/send/blob/master/server/config.js>
 
 Config options should be set as unquoted environment variables. Boolean options should be `true`/`false`, time/duration should be integers (seconds), and filesize values should be integers (bytes).
 
@@ -36,7 +58,7 @@ Config options expecting array values (e.g. `EXPIRE_TIMES_SECONDS`, `DOWNLOAD_CO
 | `SEND_FOOTER_DMCA_URL` | A URL to a contact page for DMCA requests (empty / not shown by default)
 | `SENTRY_CLIENT`, `SENTRY_DSN`  | Sentry Client ID and DSN for error tracking (optional, disabled by default)
 
-*Note: more options can be found here: https://github.com/timvisee/send/blob/master/server/config.js*
+*Note: more options can be found here: <https://github.com/tarnover/send/blob/master/server/config.js>*
 
 #### Upload and Download Limits
 
@@ -53,7 +75,7 @@ Configure the limits for uploads and downloads. Long expiration times are risky 
 | `DEFAULT_DOWNLOADS` | Default download limit in UI (defaults to `1`)
 | `DEFAULT_EXPIRE_SECONDS` | Default expire time in UI (defaults to `86400`)
 
-*Note: more options can be found here: https://github.com/timvisee/send/blob/master/server/config.js*
+*Note: more options can be found here: <https://github.com/tarnover/send/blob/master/server/config.js>*
 
 #### Storage Backend Options
 
@@ -76,7 +98,7 @@ Redis is used as the metadata database for the backend and is required no matter
 | `AWS_SECRET_ACCESS_KEY` | S3 secret access key ID (only set if using S3 for storage)
 | `GCS_BUCKET` | Google Cloud Storage bucket (only set if using GCP for storage)
 
-*Note: more options can be found here: https://github.com/timvisee/send/blob/master/server/config.js*
+*Note: more options can be found here: <https://github.com/tarnover/send/blob/master/server/config.js>*
 
 ## Branding
 
@@ -114,7 +136,7 @@ $ docker run -p 1443:1443 \
   -e 'SENTRY_CLIENT=https://51e23d7263e348a7a3b90a5357c61cb2@sentry.prod.mozaws.net/168' \
   -e 'SENTRY_DSN=https://51e23d7263e348a7a3b90a5357c61cb2:65e23d7263e348a7a3b90a5357c61c44@sentry.prod.mozaws.net/168' \
   -e 'BASE_URL=https://send.example.com' \
-  registry.gitlab.com/timvisee/send:latest
+  ghcr.io/tarnover/send:latest
 ```
 
 *Note: make sure to replace the example values above with your real values before running.*
@@ -124,18 +146,18 @@ $ docker run -p 1443:1443 \
 
 ```bash
 # create a network for the send backend and redis containers to talk to each other
-$ docker network create timviseesend
+$ docker network create sendnet
 
 # start the redis container
-$ docker run --net=timviseesend -v $PWD/redis:/data redis-server --appendonly yes
+$ docker run --net=sendnet -v $PWD/redis:/data redis-server --appendonly yes
 
 # start the send backend container
-$ docker run --net=timviseesend -v $PWD/uploads:/uploads -p 1443:1443 \
+$ docker run --net=sendnet -v $PWD/uploads:/uploads -p 1443:1443 \
     -e 'BASE_URL=http://localhost:1443' \
     -e 'MAX_FILE_SIZE=5368709120' \
     -e 'MAX_EXPIRE_SECONDS=2592000' \
     -e 'SEND_FOOTER_DMCA_URL=https://example.com/dmca-contact-info' \
-    registry.gitlab.com/timvisee/send:latest
+    ghcr.io/tarnover/send:latest
 ```
 Then open http://localhost:1443 to view the UI. (change the `localhost` to your IP or hostname above to serve the UI to others)
 
@@ -150,7 +172,7 @@ $ docker run -p 1443:1443 \
     -e 'UI_COLOR_PRIMARY=#f00' \
     -e 'UI_COLOR_ACCENT=#a00' \
     -e 'UI_CUSTOM_ASSETS_ICON=custom_assets/logo.svg' \
-    registry.gitlab.com/timvisee/send:latest
+    ghcr.io/tarnover/send:latest
 ```
 
 ## Docker Compose
