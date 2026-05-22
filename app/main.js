@@ -11,6 +11,7 @@ import dragManager from './dragManager';
 import pasteManager from './pasteManager';
 import storage from './storage';
 import experiments from './experiments';
+import './jetbrains-mono.css';
 import './main.css';
 import User from './user';
 import { getTranslator } from './locale';

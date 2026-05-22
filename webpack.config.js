@@ -138,6 +138,11 @@ const web = {
         ]
       },
       {
+        test: /\.woff2?$/,
+        loader: 'file-loader',
+        options: { name: '[name].[contenthash:8].[ext]' }
+      },
+      {
         test: /\.(png|jpg)$/,
         loader: 'file-loader',
         options: {
