@@ -28,7 +28,7 @@ module.exports = {
       res.send(
         stripEvents(
           routes().toString(
-            `/download/${id}`,
+            `/dl/${id}`,
             Object.assign(appState, {
               downloadMetadata: { nonce, pwd }
             })

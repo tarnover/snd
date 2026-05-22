@@ -65,7 +65,7 @@ module.exports = function(ws, req) {
         nonce: crypto.randomBytes(16).toString('base64')
       };
 
-      const url = `${config.deriveBaseUrl(req)}/download/${newId}/`;
+      const url = `${config.deriveBaseUrl(req)}/dl/${newId}/`;
 
       ws.send(
         JSON.stringify({

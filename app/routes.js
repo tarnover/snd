@@ -4,6 +4,10 @@ const body = require('./ui/body');
 
 module.exports = function(app = choo({ hash: true })) {
   app.route('/', body(require('./ui/home')));
+  app.route('/dl/:id', body(download));
+  app.route('/dl/:id/:key', body(download));
+  // Back-compat for legacy share links opened in environments where the
+  // server-side redirect did not run (cached SPA navigation, etc.).
   app.route('/download/:id', body(download));
   app.route('/download/:id/:key', body(download));
   app.route('/unsupported/:reason', body(require('./ui/unsupported')));
