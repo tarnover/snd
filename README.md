@@ -115,10 +115,14 @@ multiple clients:
 
 | Client | Description |
 |---|---|
-| **Browser** — _this repository_ | Drag-and-drop web UI, no install required. |
-| **Command-line** — [`ffsend`][ffsend] | Native CLI by [@timvisee](https://github.com/timvisee). Cross-platform, scriptable, supports the full protocol (upload, download, params, password, delete). The recommended client for sensitive transfers because it avoids the operator-shipped-JS class of risks that fundamentally limit any browser-based E2EE app. |
-| **Android** | A WebView wrapper is included in this repo under `android/`. See [Android development](#android-development). |
+| **Browser** — _this repository_ | Drag-and-drop web UI, no install required. Works in mobile browsers. |
+| **Command-line** — [`ffsend`][ffsend] | Native CLI by [@timvisee](https://github.com/timvisee). Cross-platform, scriptable, supports the full protocol (upload, download, params, password, delete). The recommended client for sensitive transfers because it avoids the operator-shipped-JS class of risks that fundamentally limit any browser-based E2EE app. Runs on Android via Termux. |
 | **Thunderbird** | The [FileLink provider for Send](https://addons.thunderbird.net/thunderbird/addon/filelink-provider-for-send/) extension lets you attach via a hosted Send instance from inside Thunderbird. |
+
+The legacy `android/` and `ios/` WebView wrappers carried by upstream
+`mozilla/send` were unmaintained, hard-coded the dead `send.firefox.com`
+service, and have been removed from this fork. Mobile users should use the
+web UI in their browser or `ffsend`.
 
 If you operate a public Send instance and want to recommend a single client to
 users for security-critical use, point them at `ffsend`.
@@ -150,18 +154,6 @@ npm start
 Then browse to <http://localhost:8080>. The dev server watches files and
 reloads automatically. Frontend unit tests are mounted at
 <http://localhost:8080/test>.
-
-### Android development
-
-The Android WebView wrapper sources live in `android/`. To preview the
-mobile layout against the dev server:
-
-```bash
-ANDROID=1 npm start
-```
-
-Then open <http://localhost:8080>. Android-specific CSS and image assets
-are under `android/app/src/main/assets`.
 
 ---
 

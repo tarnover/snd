@@ -31,7 +31,6 @@
     "test-integration": "cross-env NODE_ENV=development wdio test/wdio.docker.conf.js",
     "circleci-test-integration": "echo 'webdriverio tests need to be updated to node 12'",
     "start": "npm run clean && cross-env NODE_ENV=development L10N_DEV=true BASE_URL=http://localhost:8080 DETECT_BASE_URL=true webpack-dev-server --mode=development",
-    "android": "cross-env ANDROID=1 npm start",
     "prod": "node server/bin/prod.js"
   },
   "husky": {
