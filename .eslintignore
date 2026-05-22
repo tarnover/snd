@@ -1,8 +1,6 @@
 dist
 assets
-firefox
 coverage
-android/app/build
 app/locale.js
 app/capabilities.js
 app/qrcode.js
