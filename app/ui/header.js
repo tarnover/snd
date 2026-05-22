@@ -1,8 +1,6 @@
 const html = require('choo/html');
 const Component = require('choo/component');
 const Account = require('./account');
-const assets = require('../../common/assets');
-const { platform } = require('../utils');
 
 class Header extends Component {
   constructor(name, state, emit) {
