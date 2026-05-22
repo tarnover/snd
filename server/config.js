@@ -199,6 +199,11 @@ const conf = convict({
     default: '', // disabled
     env: 'FXA_CLIENT_ID'
   },
+  fxa_required: {
+    format: Boolean,
+    default: false,
+    env: 'FXA_REQUIRED'
+  },
   fxa_key_scope: {
     format: String,
     default: 'https://identity.mozilla.com/apps/send',

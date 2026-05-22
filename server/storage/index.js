@@ -59,11 +59,11 @@ class DB {
   }
 
   setField(id, key, value) {
-    this.redis.hset(id, key, value);
+    return this.redis.hsetAsync(id, key, value);
   }
 
   incrementField(id, key, increment = 1) {
-    this.redis.hincrby(id, key, increment);
+    return this.redis.hincrbyAsync(id, key, increment);
   }
 
   async del(id) {

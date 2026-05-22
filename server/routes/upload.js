@@ -14,11 +14,19 @@ module.exports = async function(req, res) {
   if (!metadata || !auth) {
     return res.sendStatus(400);
   }
+  const authParts = auth.split(' ');
+  if (
+    authParts.length !== 2 ||
+    authParts[0] !== 'send-v1' ||
+    !/^[A-Za-z0-9+/]+={0,2}$/.test(authParts[1])
+  ) {
+    return res.sendStatus(400);
+  }
   const owner = crypto.randomBytes(10).toString('hex');
   const meta = {
     owner,
     metadata,
-    auth: auth.split(' ')[1],
+    auth: authParts[1],
     nonce: crypto.randomBytes(16).toString('base64')
   };
 

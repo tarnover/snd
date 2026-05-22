@@ -45,9 +45,26 @@ module.exports = function(ws, req) {
       if (
         !metadata ||
         !auth ||
+        !Number.isInteger(timeLimit) ||
         timeLimit <= 0 ||
         timeLimit > maxExpireSeconds ||
+        !Number.isInteger(dlimit) ||
+        dlimit < 1 ||
         dlimit > maxDownloads
+      ) {
+        ws.send(
+          JSON.stringify({
+            error: 400
+          })
+        );
+        return ws.close();
+      }
+
+      const authParts = typeof auth === 'string' ? auth.split(' ') : [];
+      if (
+        authParts.length !== 2 ||
+        authParts[0] !== 'send-v1' ||
+        !/^[A-Za-z0-9+/]+={0,2}$/.test(authParts[1])
       ) {
         ws.send(
           JSON.stringify({
@@ -61,7 +78,7 @@ module.exports = function(ws, req) {
         owner,
         metadata,
         dlimit,
-        auth: auth.split(' ')[1],
+        auth: authParts[1],
         nonce: crypto.randomBytes(16).toString('base64')
       };
 
