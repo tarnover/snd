@@ -138,16 +138,6 @@ const conf = convict({
     arg: 'port',
     env: 'PORT'
   },
-  sentry_id: {
-    format: String,
-    default: '',
-    env: 'SENTRY_CLIENT'
-  },
-  sentry_dsn: {
-    format: String,
-    default: '',
-    env: 'SENTRY_DSN'
-  },
   env: {
     format: ['production', 'development', 'test'],
     default: 'development',

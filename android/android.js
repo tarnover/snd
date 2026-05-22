@@ -1,7 +1,6 @@
 import 'intl-pluralrules';
 import choo from 'choo';
 import html from 'choo/html';
-import * as Sentry from '@sentry/browser';
 
 import { setApiUrlPrefix, getConstants } from '../app/api';
 //import assets from '../common/assets';
@@ -84,7 +83,6 @@ function body(main) {
     );
     state.storage = storage;
     state.user = new User(storage, LIMITS);
-    state.sentry = Sentry;
   });
   app.route('/', body(home));
   app.route('/upload', upload);
