@@ -381,8 +381,6 @@ select {
 .white-violet:focus {
   @apply bg-violet;
   @apply text-white;
-
-  background-image: var(--violet-gradient);
 }
 
 .violet {
@@ -392,7 +390,7 @@ select {
 
 .violet:hover,
 .violet:focus {
-  background-image: var(--violet-gradient);
+  @apply bg-violet;
 }
 
 /* end signin button color experiment */
