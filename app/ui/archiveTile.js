@@ -12,6 +12,7 @@ const {
   timeLeft
 } = require('../utils');
 const expiryOptions = require('./expiryOptions');
+const qr = require('./qr');
 
 function expiryInfo(translate, archive) {
   const l10n = timeLeft(archive.expiresAt - Date.now());
@@ -284,6 +285,7 @@ module.exports = function(state, emit, archive) {
       <div class="flex justify-between w-full">
         ${dl} ${copyOrShare}
       </div>
+      <div class="snd-qr-inline">${qr(archive.url)}</div>
     </send-archive>
   `;
 
