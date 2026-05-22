@@ -32,6 +32,8 @@ module.exports = function(config) {
   client.ttlAsync = promisify(client.ttl);
   client.hgetallAsync = promisify(client.hgetall);
   client.hgetAsync = promisify(client.hget);
+  client.hsetAsync = promisify(client.hset);
+  client.hincrbyAsync = promisify(client.hincrby);
   client.pingAsync = promisify(client.ping);
   return client;
 };

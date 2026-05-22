@@ -4,7 +4,7 @@ const storage = require('../storage');
 module.exports = function(req, res) {
   const max = config.max_downloads;
   const dlimit = req.body.dlimit;
-  if (!dlimit || dlimit > max) {
+  if (!Number.isInteger(dlimit) || dlimit < 1 || dlimit > max) {
     return res.sendStatus(400);
   }
 

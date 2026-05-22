@@ -9,8 +9,7 @@ class S3Storage {
       cfg['endpoint'] = config.s3_endpoint;
     }
     cfg['s3ForcePathStyle'] = config.s3_use_path_style_endpoint;
-    AWS.config.update(cfg);
-    this.s3 = new AWS.S3();
+    this.s3 = new AWS.S3(cfg);
   }
 
   async length(id) {

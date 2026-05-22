@@ -23,7 +23,7 @@ module.exports = {
         const verifyHash = hmac.digest();
         if (crypto.timingSafeEqual(verifyHash, Buffer.from(auth, 'base64'))) {
           req.nonce = crypto.randomBytes(16).toString('base64');
-          storage.setField(id, 'nonce', req.nonce);
+          await storage.setField(id, 'nonce', req.nonce);
           res.set('WWW-Authenticate', `send-v1 ${req.nonce}`);
           req.authorized = true;
           req.meta = meta;
