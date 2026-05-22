@@ -5,19 +5,17 @@ const modal = require('./modal');
 module.exports = function(state, emit) {
   const btnText = state.user.loggedIn ? 'okButton' : 'sendYourFilesLink';
   return html`
-    <main class="main">
+    <main class="snd-main snd-main--centered">
       ${state.modal && modal(state, emit)}
-      <section
-        class="flex flex-col items-center justify-center h-full w-full p-6 md:p-8 overflow-hidden md:rounded-xl md:shadow-big"
-      >
-        <h1 class="text-center text-3xl font-bold my-2">
+      <section class="snd-recipient">
+        <h1 class="snd-display text-center my-2">
           ${state.translate('errorPageHeader')}
         </h1>
         <svg class="text-primary my-12 h-48">
           <use xlink:href="${assets.get('error.svg')}#svg114" />
         </svg>
         <p
-          class="max-w-md text-center text-grey-80 leading-normal dark:text-grey-40 ${state
+          class="snd-body snd-text-mute max-w-md text-center leading-normal ${state
             .user.loggedIn
             ? 'hidden'
             : ''}"
@@ -25,7 +23,7 @@ module.exports = function(state, emit) {
           ${state.translate('trySendDescription')}
         </p>
         <p class="my-5">
-          <a href="/" class="btn rounded-lg flex items-center" role="button"
+          <a href="/" class="snd-btn snd-btn--primary flex items-center" role="button"
             >${state.translate(btnText)}</a
           >
         </p>
