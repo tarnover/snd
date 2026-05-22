@@ -52,6 +52,12 @@ module.exports = function(ws, req) {
         dlimit < 1 ||
         dlimit > maxDownloads
       ) {
+        log.error('ws.params', {
+          hasMetadata: !!metadata,
+          hasAuth: !!auth,
+          timeLimit,
+          dlimit
+        });
         ws.send(
           JSON.stringify({
             error: 400
@@ -64,8 +70,9 @@ module.exports = function(ws, req) {
       if (
         authParts.length !== 2 ||
         authParts[0] !== 'send-v1' ||
-        !/^[A-Za-z0-9+/]+={0,2}$/.test(authParts[1])
+        !/^[A-Za-z0-9+/_-]+={0,2}$/.test(authParts[1])
       ) {
+        log.error('ws.authFormat', { scheme: authParts[0] });
         ws.send(
           JSON.stringify({
             error: 400
