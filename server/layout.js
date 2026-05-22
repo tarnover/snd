@@ -28,8 +28,8 @@ module.exports = function(state, body = '') {
         <meta property="og:image" content="${state.ui.assets.facebook}" />
         <meta name="twitter:image" content="${state.ui.assets.twitter}" />
         <meta property="og:url" content="${state.baseUrl}" />
-        <meta name="theme-color" content="#220033" />
-        <meta name="msapplication-TileColor" content="#220033" />
+        <meta name="theme-color" content="#0e0f0d" />
+        <meta name="msapplication-TileColor" content="#0e0f0d" />
 
         <link rel="manifest" href="/app.webmanifest" />
         <link rel="stylesheet" type="text/css" href="/inter.css" />
