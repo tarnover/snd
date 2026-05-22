@@ -151,3 +151,17 @@ html, body {
   .snd-nav { padding: 0 16px; }
   .snd-nav-items { display: none; }
 }
+
+/* Status bar */
+.snd-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  padding: 10px 32px;
+  border-top: 1px solid var(--snd-line);
+  background: var(--snd-bg);
+}
+@media (max-width: 768px) {
+  .snd-statusbar { padding: 10px 16px; height: auto; flex-direction: column; gap: 4px; }
+}
