@@ -8,7 +8,7 @@ html {
 
 @tailwind components;
 
-:not(input):not(textarea) {
+:not(input, textarea) {
   user-select: none;
 }
 

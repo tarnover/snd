@@ -13,3 +13,5 @@ rules:
   at-rule-no-unknown: null
   # Conflicts with prettier
   string-quotes: null
+  # Allow BEM double-dash modifiers (e.g. snd-btn--primary) and is-* state classes
+  selector-class-pattern: '^([a-z][a-z0-9]*)(-[a-z0-9]+)*(--[a-z0-9]+(-[a-z0-9]+)*)?$'
