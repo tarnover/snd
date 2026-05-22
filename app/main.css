@@ -198,51 +198,6 @@ progress::-webkit-progress-bar {
   @apply h-1;
 }
 
-progress::-webkit-progress-value {
-  /* stylelint-disable */
-  background-image: -webkit-linear-gradient(
-      -45deg,
-      transparent 20%,
-      rgb(255 255 255 / 40%) 20%,
-      rgb(255 255 255 / 40%) 40%,
-      transparent 40%,
-      transparent 60%,
-      rgb(255 255 255 / 40%) 60%,
-      rgb(255 255 255 / 40%) 80%,
-      transparent 80%
-    ),
-    -webkit-linear-gradient(left, var(--color-primary), var(--color-primary));
-  /* stylelint-enable */
-  border-radius: 2px;
-  background-size: 21px 20px, 100% 100%, 100% 100%;
-}
-
-progress::-moz-progress-bar {
-  /* stylelint-disable */
-  background-image: -moz-linear-gradient(
-      135deg,
-      transparent 20%,
-      rgb(255 255 255 / 40%) 20%,
-      rgb(255 255 255 / 40%) 40%,
-      transparent 40%,
-      transparent 60%,
-      rgb(255 255 255 / 40%) 60%,
-      rgb(255 255 255 / 40%) 80%,
-      transparent 80%
-    ),
-    -moz-linear-gradient(left, var(--color-primary), var(--color-primary));
-  /* stylelint-enable */
-  border-radius: 2px;
-  background-size: 21px 20px, 100% 100%, 100% 100%;
-  animation: animate-stripes 1s linear infinite;
-}
-
-@keyframes animate-stripes {
-  100% {
-    background-position: -21px 0;
-  }
-}
-
 select {
   background-image: url('../assets/select-arrow.svg');
   background-position: calc(100% - 0.75rem);
@@ -313,17 +268,6 @@ select {
 
 @tailwind utilities;
 
-@responsive {
-  .shadow-light {
-    box-shadow: 0 0 8px 0 rgb(12 12 13 / 10%);
-  }
-
-  .shadow-big {
-    box-shadow: 0 12px 18px 2px rgb(34 0 51 / 4%),
-      0 6px 22px 4px rgb(7 48 114 / 12%), 0 6px 10px -4px rgb(14 13 26 / 12%);
-  }
-}
-
 @variants focus {
   .outline {
     outline: 1px dotted grey;
@@ -337,7 +281,6 @@ select {
 
 .signin {
   backface-visibility: hidden;
-  border-radius: 6px;
   transition-property: transform, background-color;
   transition-duration: 250ms;
   transition-timing-function: cubic-bezier(0.07, 0.95, 0, 1);
