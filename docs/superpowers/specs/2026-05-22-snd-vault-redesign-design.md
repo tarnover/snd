@@ -151,6 +151,12 @@ Replace browser default + existing dotted outlines:
 - Add a status-bar component (`app/ui/statusBar.js`, ~30 LOC) rendered as the body's last child — left side technical claim, right side reassurance. **One new file, no new logic.** This is a passive informational strip; it does not introduce a new feature.
 - `app/ui/footer.js` — restyle to mono 11px `dim`; keep existing sponsor link / source link semantics from the recent PR #9 rework.
 
+### Mobile QR default on the share-complete screen
+
+On viewports `≤768px` (mobile breakpoint), the share-complete screen (`shareDialog.js` / post-upload state) defaults to showing the QR code expanded, with the URL row below it as the secondary affordance. On desktop (`>768px`), the URL is primary and the QR is opened via the existing button. No new logic — only a CSS-driven default state and a small JS guard so that on mount at a mobile width the QR canvas renders eagerly instead of lazily.
+
+`app/ui/qr.js` already produces the QR canvas; this is a presentation change, not a new component.
+
 ### Dialogs (`modal.js`, `copyDialog.js`, `okDialog.js`, `shareDialog.js`, `qr.js`, `signupDialog.js`, `surveyDialog.js`)
 
 Restyle to Vault: hairline-bordered card centered on a dimmed backdrop. No rounded corners. Dialog title in `.snd-display`, body in `.snd-body`. Action row at the bottom uses `.snd-btn` variants. Dismiss "×" becomes a mono character in `var(--snd-mute)`. Backdrop is `rgba(14,15,13,0.7)` over the page (no blur).
@@ -181,7 +187,7 @@ Locale grep verification step belongs in the implementation plan, not here.
 **New files:**
 - `app/ui/tokens.css` — CSS custom properties + utility classes from the Visual System section.
 - `app/ui/statusBar.js` — passive status-bar strip.
-- `assets/snd-mark.svg` — 22×22 brand mark (or inline in `header.js`; choose one in the plan, not both).
+- `assets/snd-mark.svg` — 22×22 brand mark (inline in `header.js` is fine too — the plan picks one; do not ship both).
 
 **Modified files (existing logic preserved):**
 - `app/main.css` — drop the rounded `.btn`, the violet gradient, the bg.svg `body` rule. Import `tokens.css` at the top.
@@ -191,6 +197,7 @@ Locale grep verification step belongs in the implementation plan, not here.
 - `public/locales/*/send.ftl` — `title` value (32 files; mechanical replace).
 - `assets/icon.svg` — replace with new brand mark.
 - `assets/bg.svg` — delete (no background image in Vault).
+- `assets/android-chrome-192x192.png`, `assets/android-chrome-512x512.png`, `assets/apple-touch-icon.png`, `assets/favicon-16x16.png`, `assets/favicon-32x32.png`, `assets/icon-64x64.png` — regenerate from the new `assets/icon.svg` so PWA install and tab icons match the new mark.
 - `package.json` — description field if branded.
 
 **Removed files:**
@@ -201,17 +208,18 @@ Locale grep verification step belongs in the implementation plan, not here.
 1. Every existing route renders without console errors and preserves its full functional behaviour (upload, encrypt, share, download, password gate, archive list, dialogs).
 2. The six handoff screens are visually recognisable in the running app at 1280×820, matching tokens (palette, type, borders, no radius, no shadows).
 3. Below 900px viewport: home stacks columns, archive table collapses to a stacked list per row, dialogs clamp padding.
-4. No occurrence of "Snd" or "Send" as a literal product name in any English-source string — confirmed by `grep -ri '\b\(Snd\|Send\)\b'` across `app/`, `server/`, `public/locales/en-US/`, `package.json`.
-5. No `border-radius` declaration in `app/**/*.css` other than `0` (or none).
-6. No drop-shadow declaration in `app/**/*.css`.
-7. `npm run lint:css` and `npm run lint:js` pass.
-8. Backend tests still pass (`npm run test:backend`).
+4. At ≤768px (mobile), the share-complete screen renders the QR code expanded by default, with the URL below it. At >768px the URL is primary and the QR opens via the existing button.
+5. No occurrence of "Snd" or "Send" as a literal product name in any English-source string — confirmed by `grep -ri '\b\(Snd\|Send\)\b'` across `app/`, `server/`, `public/locales/en-US/`, `package.json`.
+6. No `border-radius` declaration in `app/**/*.css` other than `0` (or none).
+7. No drop-shadow declaration in `app/**/*.css`.
+8. `npm run lint:css` and `npm run lint:js` pass.
+9. Backend tests still pass (`npm run test:backend`).
+10. Tab icon, PWA install icon, and apple-touch-icon match the new brand mark (manual visual check + file diff against the regenerated PNGs).
 
 ## Open questions deferred to implementation plan
 
 - The exact path and webpack copy/asset rule for the self-hosted JetBrains Mono `.woff2` file (the strategic decision is self-hosted to keep CSP intact and avoid CDN dependency at runtime — the plan picks the path and the loader rule).
-- Whether `assets/icon.svg` replacement needs corresponding PNG regeneration during this change or can land in a follow-up.
-- Exact responsive breakpoints below 900px — handoff only states "≤900px stack". Plan should enumerate the three or four breakpoints we actually use.
+- Exact responsive breakpoints — handoff only states "≤900px stack" and this spec adds a "≤768px mobile" rule for the QR default. Plan should enumerate the full breakpoint ladder (likely 768 / 900 / 1280) and confirm what each one toggles.
 
 ## Out-of-tree dependencies
 
