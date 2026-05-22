@@ -1,4 +1,4 @@
-title = Send
+title = Snd
 importingFile = Importing…
 encryptingFile = Encrypting…
 decryptingFile = Decrypting…
@@ -26,7 +26,6 @@ notSupportedOutdatedDetail = Unfortunately this version of Firefox does not supp
 updateFirefox = Update Firefox
 deletePopupCancel = Cancel
 deleteButtonHover = Delete
-footerText = Not affiliated with Mozilla or Firefox.
 footerLinkDonate = Donate
 footerLinkCli = CLI
 footerLinkDmca = DMCA

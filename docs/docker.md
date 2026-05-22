@@ -37,7 +37,7 @@ locally.
 
 *Note: for Docker Compose, see <https://github.com/timvisee/send-docker-compose>.*
 
-[ffsend]: https://github.com/timvisee/ffsend
+[ffsend]: https://github.com/tarnover/ffsend
 
 ## Environment Variables
 

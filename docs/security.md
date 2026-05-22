@@ -113,9 +113,10 @@ transitive packages.
 - **Host header trust under `DETECT_BASE_URL=true`** — opt-in. If you turn
   this on, put Send behind a reverse proxy that strips/normalizes the
   `Host` header before the request reaches Send.
-- **`base_url` default** of `https://send.example.com` is a footgun if you
-  deploy without setting `BASE_URL` and without setting
-  `DETECT_BASE_URL=true`.
+- **`base_url`** is set to the canonical tarnover deployment. Self-hosted
+  operators must override `BASE_URL` (or set `DETECT_BASE_URL=true`);
+  otherwise the share links they emit will point at the upstream
+  deployment rather than their own host.
 
 ## Reporting
 
@@ -123,6 +124,6 @@ Please open a private security advisory at
 <https://github.com/tarnover/send/security/advisories/new> rather than a
 public issue.
 
-[ffsend]: https://github.com/timvisee/ffsend
+[ffsend]: https://github.com/tarnover/ffsend
 [mozilla-send]: https://github.com/mozilla/send
 [timvisee-send]: https://github.com/timvisee/send

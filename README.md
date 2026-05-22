@@ -46,7 +46,7 @@ CLI as well as the browser.
 Everything else — protocol, file format, web UI, configuration knobs — is
 unchanged and remains compatible with downstream tooling.
 
-[ffsend]: https://github.com/timvisee/ffsend
+[ffsend]: https://github.com/tarnover/ffsend
 [mozilla-send]: https://github.com/mozilla/send
 [timvisee-send]: https://github.com/timvisee/send
 
