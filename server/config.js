@@ -155,12 +155,12 @@ const conf = convict({
   },
   base_url: {
     format: 'url',
-    default: 'https://send.example.com',
+    default: 'https://snd.dx.pe',
     env: 'BASE_URL'
   },
   custom_title: {
     format: String,
-    default: 'Send',
+    default: 'Snd',
     env: 'CUSTOM_TITLE'
   },
   custom_description: {
@@ -236,7 +236,7 @@ const conf = convict({
   },
   footer_cli_url: {
     format: String,
-    default: 'https://github.com/timvisee/ffsend',
+    default: 'https://github.com/tarnover/ffsend',
     env: 'SEND_FOOTER_CLI_URL'
   },
   footer_dmca_url: {
@@ -246,7 +246,7 @@ const conf = convict({
   },
   footer_source_url: {
     format: String,
-    default: 'https://github.com/timvisee/send',
+    default: 'https://github.com/tarnover/send',
     env: 'SEND_FOOTER_SOURCE_URL'
   },
   custom_footer_text: {

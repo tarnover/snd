@@ -1,4 +1,4 @@
-title = Send
+title = Snd
 importingFile = Eq'otzan
 encryptingFile = La muj isik'lele
 decryptingFile = Ni jaj ve't isik'lele'

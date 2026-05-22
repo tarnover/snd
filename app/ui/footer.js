@@ -58,7 +58,7 @@ class Footer extends Component {
     } else {
       links.push(html`
         <li class="m-2">
-          <a href="https://gitlab.com/timvisee/send" target="_blank">
+          <a href="https://github.com/tarnover/send" target="_blank">
             ${translate('footerLinkSource')}
           </a>
         </li>
@@ -98,7 +98,8 @@ class Footer extends Component {
       else  {
         footer.push(html`
           <li class="m-2">
-            ${translate('footerText')}
+            Sponsored by
+            <a href="https://thirdkey.ai" target="_blank" rel="noopener noreferrer">thirdkey.ai</a>
           </li>
         `);
       }

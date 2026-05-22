@@ -30,7 +30,7 @@ Since Send is an open-source project, you can read the source at <https://github
 
 ## Is there a command-line client?
 
-Yes — [`ffsend`](https://github.com/timvisee/ffsend), built by Tim Visee, is a fully-featured CLI that speaks the Send protocol. It can upload, download, set/clear passwords, change params, and delete shares. It is the recommended client for any sensitive workflow because, unlike the web UI, it doesn't trust the operator to ship correct JavaScript.
+Yes — [`ffsend`](https://github.com/tarnover/ffsend), built by Tim Visee, is a fully-featured CLI that speaks the Send protocol. It can upload, download, set/clear passwords, change params, and delete shares. It is the recommended client for any sensitive workflow because, unlike the web UI, it doesn't trust the operator to ship correct JavaScript.
 
 ## How long are files available for?
 
