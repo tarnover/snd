@@ -17,7 +17,10 @@ function kv(f) {
 }
 
 module.exports = function() {
-  const files = fs.readdirSync(path.join(__dirname, '..', 'assets'));
+  const assetsDir = path.join(__dirname, '..', 'assets');
+  const files = fs
+    .readdirSync(assetsDir)
+    .filter(f => fs.statSync(path.join(assetsDir, f)).isFile());
   const code = `module.exports = {
     ${files.map(kv).join(',\n')}
   };`;
