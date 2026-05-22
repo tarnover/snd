@@ -12,11 +12,6 @@ export default function initialState(state, emitter) {
     getAsset(name) {
       return `${state.prefix}/${name}`;
     },
-    sentry: {
-      captureException: e => {
-        console.error('ERROR ' + e + ' ' + e.stack);
-      }
-    },
     storage: {
       files,
       remove: function(fileId) {

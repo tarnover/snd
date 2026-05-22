@@ -69,7 +69,8 @@ export default function(state, emitter) {
       state.storage.remove(ownedFile.id);
       await ownedFile.del();
     } catch (e) {
-      state.sentry.captureException(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
     }
     render();
   });
@@ -175,11 +176,6 @@ export default function(state, emitter) {
       } else {
         // eslint-disable-next-line no-console
         console.error(err);
-        state.sentry.withScope(scope => {
-          scope.setExtra('duration', err.duration);
-          scope.setExtra('size', err.size);
-          state.sentry.captureException(err);
-        });
         emitter.emit('pushState', '/error');
       }
     } finally {
@@ -254,12 +250,8 @@ export default function(state, emitter) {
         state.transfer = null;
         const location = err.message === '404' ? '/404' : '/error';
         if (location === '/error') {
-          state.sentry.withScope(scope => {
-            scope.setExtra('duration', err.duration);
-            scope.setExtra('size', err.size);
-            scope.setExtra('progress', err.progress);
-            state.sentry.captureException(err);
-          });
+          // eslint-disable-next-line no-console
+          console.error(err);
         }
         emitter.emit('pushState', location);
       }

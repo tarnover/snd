@@ -56,7 +56,6 @@ Config options expecting array values (e.g. `EXPIRE_TIMES_SECONDS`, `DOWNLOAD_CO
 | `PORT`           | Port the server will listen on (defaults to `1443`)
 | `NODE_ENV`       | Run in `development` mode (unsafe) or `production` mode (the default)
 | `SEND_FOOTER_DMCA_URL` | A URL to a contact page for DMCA requests (empty / not shown by default)
-| `SENTRY_CLIENT`, `SENTRY_DSN`  | Sentry Client ID and DSN for error tracking (optional, disabled by default)
 
 *Note: more options can be found here: <https://github.com/tarnover/send/blob/master/server/config.js>*
 
@@ -127,14 +126,12 @@ Side note: If you define a custom URL and a custom footer, only the footer text 
 
 ## Examples
 
-**Run using an Amazon Elasticache for the Redis DB, Amazon S3 for the storage backend, and Sentry for error reporting.**
+**Run using an Amazon Elasticache for the Redis DB and Amazon S3 for the storage backend.**
 
 ```bash
 $ docker run -p 1443:1443 \
   -e 'S3_BUCKET=testpilot-p2p-dev' \
   -e 'REDIS_HOST=dyf9s2r4vo3.bolxr4.0001.usw2.cache.amazonaws.com' \
-  -e 'SENTRY_CLIENT=https://51e23d7263e348a7a3b90a5357c61cb2@sentry.prod.mozaws.net/168' \
-  -e 'SENTRY_DSN=https://51e23d7263e348a7a3b90a5357c61cb2:65e23d7263e348a7a3b90a5357c61c44@sentry.prod.mozaws.net/168' \
   -e 'BASE_URL=https://send.example.com' \
   ghcr.io/tarnover/send:latest
 ```
