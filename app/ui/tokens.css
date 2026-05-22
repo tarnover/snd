@@ -310,3 +310,33 @@ send-upload-area { display: block; }
 .snd-select:focus { outline: 2px solid var(--snd-accent); outline-offset: 2px; }
 
 .snd-expiry-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* Modal shell */
+.snd-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.snd-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 15, 13, 0.70);
+}
+.snd-modal-card {
+  position: relative;
+  z-index: 1;
+  background: var(--snd-bg);
+  border: 1px solid var(--snd-line);
+  padding: 32px;
+  max-width: 560px;
+  width: 100%;
+  border-radius: 0;
+}
+@media (max-width: 768px) {
+  .snd-modal { padding: 16px; }
+  .snd-modal-card { padding: 24px; }
+}
