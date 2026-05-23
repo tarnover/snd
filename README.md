@@ -1,17 +1,17 @@
-# [![Send](./assets/icon-64x64.png)](https://github.com/tarnover/send) Send
+# [![SND](./assets/icon-64x64.png)](https://github.com/tarnover/snd) SND
 
 [![Build status][ci-badge]][ci-link]
 [![Container image][container-badge]][container-link]
 [![Latest release][release-badge]][release-link]
 [![License][repo-license-badge]](LICENSE)
 
-[ci-badge]: https://github.com/tarnover/send/actions/workflows/docker.yml/badge.svg?branch=master
-[ci-link]: https://github.com/tarnover/send/actions/workflows/docker.yml
-[container-badge]: https://img.shields.io/badge/ghcr.io-tarnover%2Fsend-blue
-[container-link]: https://github.com/tarnover/send/pkgs/container/send
-[release-badge]: https://img.shields.io/github/v/tag/tarnover/send
-[release-link]: https://github.com/tarnover/send/tags
-[repo-license-badge]: https://img.shields.io/github/license/tarnover/send.svg
+[ci-badge]: https://github.com/tarnover/snd/actions/workflows/docker.yml/badge.svg?branch=master
+[ci-link]: https://github.com/tarnover/snd/actions/workflows/docker.yml
+[container-badge]: https://img.shields.io/badge/ghcr.io-tarnover%2Fsnd-blue
+[container-link]: https://github.com/tarnover/snd/pkgs/container/snd
+[release-badge]: https://img.shields.io/github/v/tag/tarnover/snd
+[release-link]: https://github.com/tarnover/snd/tags
+[repo-license-badge]: https://img.shields.io/github/license/tarnover/snd.svg
 
 A privacy-friendly, browser-encrypted file-sharing service. Files are encrypted
 client-side before they reach the server; the decryption key never leaves the
@@ -22,7 +22,7 @@ is in turn a fork of [Mozilla's Firefox Send][mozilla-send] (discontinued in
 2020). The fork lineage is:
 
 ```
-mozilla/send  →  timvisee/send  →  tarnover/send (this repo)
+mozilla/send  →  timvisee/send  →  tarnover/snd (this repo)
 ```
 
 The protocol stays compatible with the [`ffsend`][ffsend] command-line client
@@ -36,10 +36,10 @@ CLI as well as the browser.
   smaller fixes. See [docs/security.md](docs/security.md) for the audit.
 - **GitHub-hosted images** — multi-arch (`linux/amd64`, `linux/arm64`)
   containers built by GitHub Actions and published to
-  [`ghcr.io/tarnover/send`](https://github.com/tarnover/send/pkgs/container/send).
+  [`ghcr.io/tarnover/snd`](https://github.com/tarnover/snd/pkgs/container/snd).
 - **CVE clean production tree** — dep audit landed all known production
   advisories down to a single low-severity SDK-EOL warning. See the
-  [deps PR](https://github.com/tarnover/send/pull/3) for the full diff.
+  [deps PR](https://github.com/tarnover/snd/pull/3) for the full diff.
   The remaining `npm audit` and deprecation noise (visible during
   `docker build` and `npm ci`) is **entirely in the dev / build chain**
   — webpack 4 + babel 6 + extract-text / extract / html / copy loaders
@@ -83,7 +83,7 @@ unchanged and remains compatible with downstream tooling.
 
 ## What it does
 
-Send lets you share a file by uploading it from the browser; the file is
+SND lets you share a file by uploading it from the browser; the file is
 encrypted with a randomly-generated key before upload and the URL handed back
 to you contains the key in its fragment. Anyone with the link can fetch and
 decrypt; the server only ever sees ciphertext.
@@ -101,14 +101,14 @@ Pull the multi-arch image from GitHub Container Registry and point it at a
 Redis instance:
 
 ```bash
-docker pull ghcr.io/tarnover/send:latest
+docker pull ghcr.io/tarnover/snd:latest
 
 docker run --rm -p 1443:1443 \
     -v "$PWD/uploads:/uploads" \
     -e DETECT_BASE_URL=true \
     -e REDIS_HOST=redis \
     -e FILE_DIR=/uploads \
-    ghcr.io/tarnover/send:latest
+    ghcr.io/tarnover/snd:latest
 ```
 
 Browse to <http://localhost:1443>. For S3, GCS, custom branding, and other
@@ -118,21 +118,21 @@ options, see [docs/docker.md](docs/docker.md).
 
 ## Clients
 
-Send is a server + web UI, but it speaks a documented protocol that has
+SND is a server + web UI, but it speaks a documented protocol that has
 multiple clients:
 
 | Client | Description |
 |---|---|
 | **Browser** — _this repository_ | Drag-and-drop web UI, no install required. Works in mobile browsers. |
 | **Command-line** — [`ffsend`][ffsend] | Native CLI by [@timvisee](https://github.com/timvisee). Cross-platform, scriptable, supports the full protocol (upload, download, params, password, delete). The recommended client for sensitive transfers because it avoids the operator-shipped-JS class of risks that fundamentally limit any browser-based E2EE app. Runs on Android via Termux. |
-| **Thunderbird** | The [FileLink provider for Send](https://addons.thunderbird.net/thunderbird/addon/filelink-provider-for-send/) extension lets you attach via a hosted Send instance from inside Thunderbird. |
+| **Thunderbird** | The [FileLink provider for Send](https://addons.thunderbird.net/thunderbird/addon/filelink-provider-for-send/) extension lets you attach via a hosted SND instance from inside Thunderbird. |
 
 The legacy `android/` and `ios/` WebView wrappers carried by upstream
 `mozilla/send` were unmaintained, hard-coded the dead `send.firefox.com`
 service, and have been removed from this fork. Mobile users should use the
 web UI in their browser or `ffsend`.
 
-If you operate a public Send instance and want to recommend a single client to
+If you operate a public SND instance and want to recommend a single client to
 users for security-critical use, point them at `ffsend`.
 
 ---
@@ -153,8 +153,8 @@ users for security-critical use, point them at `ffsend`.
 ## Development
 
 ```bash
-git clone https://github.com/tarnover/send.git
-cd send
+git clone https://github.com/tarnover/snd.git
+cd snd
 npm install
 npm start
 ```
@@ -185,7 +185,7 @@ The server reads configuration from environment variables. The full schema
 with defaults is in [`server/config.js`](server/config.js); commonly-tuned
 options are tabulated in [docs/docker.md](docs/docker.md). Highlights:
 
-- `BASE_URL` — the public URL where Send is reachable. Required in production
+- `BASE_URL` — the public URL where SND is reachable. Required in production
   unless `DETECT_BASE_URL=true` is set (which trusts the `Host` header).
 - `REDIS_HOST`, `REDIS_PORT`, `REDIS_USER`, `REDIS_PASSWORD`, `REDIS_DB`.
 - `S3_BUCKET` / `GCS_BUCKET` / `FILE_DIR` — pick one storage backend.
@@ -198,7 +198,7 @@ options are tabulated in [docs/docker.md](docs/docker.md). Highlights:
 ## Deployment
 
 - **Container** — see [docs/docker.md](docs/docker.md). The image is published
-  at `ghcr.io/tarnover/send:latest` and tagged per release.
+  at `ghcr.io/tarnover/snd:latest` and tagged per release.
 - **Bare-metal Linux** — see [docs/deployment.md](docs/deployment.md) for an
   Apache reverse-proxy example.
 - **AWS** — see [docs/AWS.md](docs/AWS.md) for an Ubuntu Server walkthrough.
@@ -228,7 +228,7 @@ want it listed there, follow the contribution instructions in that repo.
 ## Contributing
 
 Pull requests and issues are welcome at
-<https://github.com/tarnover/send>. Please follow the existing code style
+<https://github.com/tarnover/snd>. Please follow the existing code style
 (`npm run format` + `npm run lint`) and add a test where it makes sense.
 
 If a change applies equally well to the upstream `timvisee/send` fork, please

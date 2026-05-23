@@ -1,6 +1,6 @@
 # Localization
 
-Send is localized in over 50 languages. We use the [fluent](http://projectfluent.org/) library and store our translations in [FTL](http://projectfluent.org/fluent/guide/) files in `public/locales/`. `en-US` is our base language.
+SND is localized in over 50 languages. We use the [fluent](http://projectfluent.org/) library and store our translations in [FTL](http://projectfluent.org/fluent/guide/) files in `public/locales/`. `en-US` is our base language.
 
 ## Process
 
