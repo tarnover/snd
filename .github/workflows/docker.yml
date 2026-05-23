@@ -16,13 +16,29 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  # Build one platform per runner. Each job retries on transient failures
+  # (typically ECONNRESET against the npm registry, more common on arm64
+  # under qemu emulation). On `push` events the platform image is pushed
+  # by digest only — no tags yet. The `merge` job below stitches the
+  # digests together into a multi-arch manifest with the real tags.
   build:
-    name: Build${{ github.event_name != 'pull_request' && ' and push' || '' }}
+    name: Build (${{ matrix.platform }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
+      - name: Prepare platform identifier
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -45,6 +61,84 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.title=SND
+            org.opencontainers.image.description=A fork of Mozilla's Firefox Send. Simple, private file sharing.
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.licenses=MPL-2.0
+
+      - name: Build (and push digest on master/tag)
+        id: build
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 30
+          max_attempts: 3
+          retry_wait_seconds: 30
+          retry_on: error
+          command: |
+            docker buildx build \
+              --platform "${{ matrix.platform }}" \
+              --label "org.opencontainers.image.title=SND" \
+              --label "org.opencontainers.image.description=A fork of Mozilla's Firefox Send. Simple, private file sharing." \
+              --label "org.opencontainers.image.source=https://github.com/${{ github.repository }}" \
+              --label "org.opencontainers.image.licenses=MPL-2.0" \
+              --cache-from "type=gha,scope=${{ env.PLATFORM_PAIR }}" \
+              --cache-to "type=gha,mode=max,scope=${{ env.PLATFORM_PAIR }}" \
+              --provenance=false \
+              ${{ github.event_name != 'pull_request' && format('--output "type=image,name={0}/{1},push-by-digest=true,name-canonical=true,push=true"', env.REGISTRY, env.IMAGE_NAME) || '--output type=cacheonly' }} \
+              --metadata-file /tmp/metadata.json \
+              .
+
+      - name: Export digest
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p /tmp/digests
+          digest=$(jq -r '."containerimage.digest"' < /tmp/metadata.json)
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  # Stitch per-platform digests into a single multi-arch manifest and
+  # push it under all the real tags (latest, master, sha, semver, etc.).
+  # Skips on pull_request because the build job above doesn't push then.
+  merge:
+    name: Push multi-arch manifest
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -53,21 +147,15 @@ jobs:
             type=semver,pattern={{major}}
             type=sha,format=short
             type=raw,value=latest,enable={{is_default_branch}}
-          labels: |
-            org.opencontainers.image.title=Send
-            org.opencontainers.image.description=A fork of Mozilla's Firefox Send. Simple, private file sharing.
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.licenses=MPL-2.0
 
-      - name: Build and push
-        id: build
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          provenance: false
+      - name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create \
+            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
