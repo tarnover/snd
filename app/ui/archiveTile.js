@@ -151,14 +151,12 @@ function password(state) {
 function fileInfo(file, action) {
   return html`
     <send-file class="flex flex-row items-center p-3 w-full">
-      <svg class="h-8 w-8 snd-text-accent">
+      <svg class="h-8 w-8 snd-text-accent flex-shrink-0">
         <use xlink:href="${assets.get('blue_file.svg')}#icon"/>
       </svg>
-      <p class="ml-4 w-full">
-        <h1 class="snd-numeric word-break-all">${file.name}</h1>
-        <div class="snd-code-sm snd-text-mute pt-1">${bytes(
-          file.size
-        )}</div>
+      <p class="snd-tile-meta ml-4">
+        <h1 class="snd-tile-name" title="${file.name}">${file.name}</h1>
+        <div class="snd-code-sm snd-text-mute pt-1">${bytes(file.size)}</div>
       </p>
       ${action}
     </send-file>`;
@@ -170,11 +168,9 @@ function archiveInfo(archive, action) {
       <svg class="h-8 w-6 mr-3 flex-shrink-0 snd-text-accent">
         <use xlink:href="${assets.get('blue_file.svg')}#icon"/>
       </svg>
-      <p class="flex-grow">
-        <h1 class="snd-numeric word-break-all">${archive.name}</h1>
-        <div class="snd-code-sm snd-text-mute pt-1">${bytes(
-          archive.size
-        )}</div>
+      <p class="snd-tile-meta">
+        <h1 class="snd-tile-name" title="${archive.name}">${archive.name}</h1>
+        <div class="snd-code-sm snd-text-mute pt-1">${bytes(archive.size)}</div>
       </p>
       ${action}
     </p>`;
