@@ -1,5 +1,4 @@
 const html = require('choo/html');
-const assets = require('../../common/assets');
 const modal = require('./modal');
 
 module.exports = function(state, emit) {
@@ -7,25 +6,29 @@ module.exports = function(state, emit) {
   return html`
     <main class="snd-main snd-main--centered">
       ${state.modal && modal(state, emit)}
-      <section class="snd-recipient">
-        <h1 class="snd-display text-center my-2">
+      <section class="snd-complete">
+        <div class="snd-complete-hero" aria-hidden="true">
+          <svg viewBox="0 0 100 100" width="96" height="96">
+            <rect x="1.5" y="1.5" width="97" height="97" fill="none" stroke="var(--snd-line)" stroke-width="1"/>
+            <rect x="18" y="18" width="64" height="64" fill="none" stroke="var(--snd-line)" stroke-width="1"/>
+            <rect x="35" y="35" width="30" height="30" fill="none" stroke="var(--snd-mute)" stroke-width="1.5"/>
+            <line x1="35" y1="65" x2="65" y2="35" stroke="var(--snd-mute)" stroke-width="2" stroke-linecap="square"/>
+          </svg>
+        </div>
+        <p class="snd-tag snd-text-dim">EXPIRED</p>
+        <h1 class="snd-display text-center">
           ${state.translate('expiredTitle')}
         </h1>
-        <svg class="text-primary my-12">
-          <use xlink:href="${assets.get('notFound.svg')}#svg124" />
-        </svg>
-        <p
-          class="snd-body snd-text-mute max-w-md text-center leading-normal ${state
-            .user.loggedIn
-            ? 'hidden'
-            : ''}"
-        >
+        <p class="snd-caption snd-text-dim">
+          > share no longer available · file removed from server
+        </p>
+        <p class="snd-body snd-text-mute text-center ${state.user.loggedIn ? 'hidden' : ''}">
           ${state.translate('trySendDescription')}
         </p>
-        <p class="my-5">
-          <a href="/" class="snd-btn snd-btn--primary flex items-center" role="button"
-            >${state.translate(btnText)}</a
-          >
+        <p>
+          <a href="/" class="snd-btn snd-btn--primary" role="button">
+            ${state.translate(btnText)}
+          </a>
         </p>
       </section>
     </main>
