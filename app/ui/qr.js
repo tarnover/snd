@@ -10,7 +10,6 @@ module.exports = function(url) {
   return html`
     <div class="snd-qr-card">
       ${raw(qr)}
-      <p class="snd-qr-url">${url}</p>
     </div>
   `;
 };

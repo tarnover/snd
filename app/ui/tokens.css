@@ -640,26 +640,25 @@ send-upload-area {
 
 /* QR card */
 .snd-qr-card {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: rgb(232 230 223 / 3%);
+  padding: 12px;
+  background: #fff;
   border: 1px solid var(--snd-line);
 }
 
-.snd-qr-card canvas {
-  background: #fff;
-  padding: 8px;
+.snd-qr-card svg {
+  display: block;
+  width: 160px;
+  height: 160px;
 }
 
-.snd-qr-card .snd-qr-url {
-  color: var(--snd-mute);
-  font: 400 11px var(--snd-font-mono);
-  word-break: break-all;
-  text-align: center;
-  max-width: 240px;
+/* QR slot inside dialogs — centers the card with breathing room */
+.snd-qr-slot {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 /* Inline QR — hidden on desktop, visible on mobile (<=768px) */
