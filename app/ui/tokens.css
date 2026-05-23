@@ -640,26 +640,58 @@ send-upload-area {
 
 /* QR card */
 .snd-qr-card {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: rgb(232 230 223 / 3%);
+  padding: 12px;
+  background: #fff;
   border: 1px solid var(--snd-line);
 }
 
-.snd-qr-card canvas {
-  background: #fff;
-  padding: 8px;
+.snd-qr-card svg {
+  display: block;
+  width: 160px;
+  height: 160px;
 }
 
-.snd-qr-card .snd-qr-url {
-  color: var(--snd-mute);
-  font: 400 11px var(--snd-font-mono);
-  word-break: break-all;
-  text-align: center;
-  max-width: 240px;
+/* QR slot inside dialogs — centers the card with breathing room */
+.snd-qr-slot {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+/* Archive-tile filename — truncate with mid-ellipsis-style end ellipsis,
+   full name available via title attribute on hover */
+.snd-tile-meta {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.snd-tile-name {
+  font-family: var(--snd-font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--snd-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Download-complete hero — nested squares with sage check */
+.snd-complete {
+  gap: 20px;
+  padding: 40px 24px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.snd-complete-hero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 4px;
 }
 
 /* Inline QR — hidden on desktop, visible on mobile (<=768px) */
