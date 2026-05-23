@@ -16,10 +16,7 @@ class Header extends Component {
   }
 
   createElement() {
-    const t = this.state.translate;
     const version = this.state.WEB_UI ? this.state.WEB_UI.VERSION || '' : '';
-    const route = (typeof window !== 'undefined') ? window.location.pathname : '/';
-    const isActive = path => (path === '/' ? route === '/' : route.startsWith(path));
     return html`
       <header class="snd-nav flex flex-row items-center justify-between w-full" role="banner">
         <a class="snd-brand flex flex-row items-center" href="/" aria-label="SND home">
@@ -31,9 +28,6 @@ class Header extends Component {
           </span>
           <span class="snd-brand-word snd-code">SND</span>
         </a>
-        <nav class="snd-nav-items flex flex-row" role="navigation">
-          <a class="snd-nav-item ${isActive('/') ? 'is-active' : ''}" href="/">${t('uploadPageHeader')}</a>
-        </nav>
         <div class="snd-nav-status snd-code-sm">
           <span class="snd-status-dot" aria-hidden="true"></span>
           <span>e2e ● active</span>

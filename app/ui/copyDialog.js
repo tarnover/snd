@@ -15,25 +15,15 @@ module.exports = function(name, url) {
           ${state.translate('copyLinkDescription')} <br />
           ${name}
         </p>
-        <div class="flex flex-row items-center justify-center w-full" style="margin-bottom:16px">
-          <input
-            type="text"
-            id="share-url"
-            class="snd-input snd-code"
-            style="flex:1"
-            value="${url}"
-            readonly="true"
-          />
-          <button
-            id="qr-btn"
-            class="snd-btn snd-btn--ghost"
-            style="width:40px;height:40px;padding:4px;flex-shrink:0;margin-left:8px"
-            onclick="${toggleQR}"
-            title="QR code"
-          >
-            ${qr(url)}
-          </button>
-        </div>
+        <input
+          type="text"
+          id="share-url"
+          class="snd-input snd-code"
+          style="width:100%;margin-bottom:16px"
+          value="${url}"
+          readonly="true"
+        />
+        <div class="snd-qr-slot">${qr(url)}</div>
         <button
           class="snd-btn snd-btn--primary snd-btn--full"
           onclick="${copy}"
@@ -51,21 +41,6 @@ module.exports = function(name, url) {
         </button>
       </send-copy-dialog>
     `;
-
-    function toggleQR(event) {
-      event.stopPropagation();
-      const shareUrl = document.getElementById('share-url');
-      const qrBtn = document.getElementById('qr-btn');
-      if (shareUrl.classList.contains('hidden')) {
-        shareUrl.classList.remove('hidden');
-        qrBtn.style.width = '40px';
-        qrBtn.style.height = '40px';
-      } else {
-        shareUrl.classList.add('hidden');
-        qrBtn.style.width = '192px';
-        qrBtn.style.height = '192px';
-      }
-    }
 
     function copy(event) {
       event.stopPropagation();
