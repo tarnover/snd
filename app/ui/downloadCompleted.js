@@ -20,7 +20,7 @@ module.exports = function(state) {
         ${state.translate('downloadFinish')}
       </h1>
       <p class="snd-caption snd-text-dim">
-        &gt; decrypted in your browser · removed from sender
+        > decrypted in your browser · removed from sender
       </p>
       <p class="snd-body snd-text-mute text-center ${state.user.loggedIn ? 'hidden' : ''}">
         ${state.translate('trySendDescription')}
