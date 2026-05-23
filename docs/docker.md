@@ -1,18 +1,18 @@
 ## Docker quickstart
 
 Multi-arch images (`linux/amd64`, `linux/arm64`) are published from this
-repository to [GitHub Container Registry](https://github.com/tarnover/send/pkgs/container/send)
+repository to [GitHub Container Registry](https://github.com/tarnover/snd/pkgs/container/send)
 on every push to `master` and on tagged releases.
 
 ```bash
-docker pull ghcr.io/tarnover/send:latest
+docker pull ghcr.io/tarnover/snd:latest
 
 # example quickstart (point REDIS_HOST to an already-running redis server)
 docker run -v $PWD/uploads:/uploads -p 1443:1443 \
     -e 'DETECT_BASE_URL=true' \
     -e 'REDIS_HOST=localhost' \
     -e 'FILE_DIR=/uploads' \
-    ghcr.io/tarnover/send:latest
+    ghcr.io/tarnover/snd:latest
 ```
 
 Available tags:
@@ -41,7 +41,7 @@ locally.
 
 ## Environment Variables
 
-All the available config options and their defaults can be found here: <https://github.com/tarnover/send/blob/master/server/config.js>
+All the available config options and their defaults can be found here: <https://github.com/tarnover/snd/blob/master/server/config.js>
 
 Config options should be set as unquoted environment variables. Boolean options should be `true`/`false`, time/duration should be integers (seconds), and filesize values should be integers (bytes).
 
@@ -57,7 +57,7 @@ Config options expecting array values (e.g. `EXPIRE_TIMES_SECONDS`, `DOWNLOAD_CO
 | `NODE_ENV`       | Run in `development` mode (unsafe) or `production` mode (the default)
 | `SEND_FOOTER_DMCA_URL` | A URL to a contact page for DMCA requests (empty / not shown by default)
 
-*Note: more options can be found here: <https://github.com/tarnover/send/blob/master/server/config.js>*
+*Note: more options can be found here: <https://github.com/tarnover/snd/blob/master/server/config.js>*
 
 #### Upload and Download Limits
 
@@ -74,7 +74,7 @@ Configure the limits for uploads and downloads. Long expiration times are risky 
 | `DEFAULT_DOWNLOADS` | Default download limit in UI (defaults to `1`)
 | `DEFAULT_EXPIRE_SECONDS` | Default expire time in UI (defaults to `86400`)
 
-*Note: more options can be found here: <https://github.com/tarnover/send/blob/master/server/config.js>*
+*Note: more options can be found here: <https://github.com/tarnover/snd/blob/master/server/config.js>*
 
 #### Storage Backend Options
 
@@ -97,7 +97,7 @@ Redis is used as the metadata database for the backend and is required no matter
 | `AWS_SECRET_ACCESS_KEY` | S3 secret access key ID (only set if using S3 for storage)
 | `GCS_BUCKET` | Google Cloud Storage bucket (only set if using GCP for storage)
 
-*Note: more options can be found here: <https://github.com/tarnover/send/blob/master/server/config.js>*
+*Note: more options can be found here: <https://github.com/tarnover/snd/blob/master/server/config.js>*
 
 ## Branding
 
@@ -133,7 +133,7 @@ $ docker run -p 1443:1443 \
   -e 'S3_BUCKET=testpilot-p2p-dev' \
   -e 'REDIS_HOST=dyf9s2r4vo3.bolxr4.0001.usw2.cache.amazonaws.com' \
   -e 'BASE_URL=https://send.example.com' \
-  ghcr.io/tarnover/send:latest
+  ghcr.io/tarnover/snd:latest
 ```
 
 *Note: make sure to replace the example values above with your real values before running.*
@@ -154,7 +154,7 @@ $ docker run --net=sendnet -v $PWD/uploads:/uploads -p 1443:1443 \
     -e 'MAX_FILE_SIZE=5368709120' \
     -e 'MAX_EXPIRE_SECONDS=2592000' \
     -e 'SEND_FOOTER_DMCA_URL=https://example.com/dmca-contact-info' \
-    ghcr.io/tarnover/send:latest
+    ghcr.io/tarnover/snd:latest
 ```
 Then open http://localhost:1443 to view the UI. (change the `localhost` to your IP or hostname above to serve the UI to others)
 
@@ -169,7 +169,7 @@ $ docker run -p 1443:1443 \
     -e 'UI_COLOR_PRIMARY=#f00' \
     -e 'UI_COLOR_ACCENT=#a00' \
     -e 'UI_CUSTOM_ASSETS_ICON=custom_assets/logo.svg' \
-    ghcr.io/tarnover/send:latest
+    ghcr.io/tarnover/snd:latest
 ```
 
 ## Docker Compose

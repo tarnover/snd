@@ -1,6 +1,6 @@
 # Deployment to AWS
 
-This document describes how to do a deployment of Send in AWS
+This document describes how to do a deployment of SND in AWS
 
 ## AWS requirements
 
@@ -173,7 +173,7 @@ Clone repository, install JavaScript packages and compiles the assets:
 ```bash
 sudo su -l www-data -s /bin/bash
 cd /var/www/send
-git clone https://github.com/tarnover/send.git .
+git clone https://github.com/tarnover/snd.git .
 npm install
 npm run build
 exit
@@ -204,10 +204,10 @@ Create the file `/etc/systemd/system/send.service` with `root` user and `644` mo
 
 ```
 [Unit]
-Description=Send
+Description=SND
 After=network.target
 Requires=redis-server.service
-Documentation=https://github.com/tarnover/send
+Documentation=https://github.com/tarnover/snd
 
 [Service]
 Type=simple

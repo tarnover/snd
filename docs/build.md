@@ -1,4 +1,4 @@
-Send has two build configurations, development and production. Both can be run via `npm` scripts, `npm start` for development and `npm run build` for production. Webpack is our only build tool and all configuration lives in [webpack.config.js](../webpack.config.js).
+SND has two build configurations, development and production. Both can be run via `npm` scripts, `npm start` for development and `npm run build` for production. Webpack is our only build tool and all configuration lives in [webpack.config.js](../webpack.config.js).
 
 # Development
 
@@ -19,4 +19,4 @@ Send has two build configurations, development and production. Both can be run v
 
 # Custom Loaders
 
-The `build/` directory contains custom webpack loaders specific to Send. See [build/readme.md](../build/readme.md) for details on each loader.
+The `build/` directory contains custom webpack loaders specific to SND. See [build/readme.md](../build/readme.md) for details on each loader.

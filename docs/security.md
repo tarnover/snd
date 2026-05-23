@@ -1,12 +1,12 @@
 # Security
 
-This document covers the threat model Send operates under, the differences
+This document covers the threat model SND operates under, the differences
 this fork carries vs. upstream [`timvisee/send`][timvisee-send] and
 [`mozilla/send`][mozilla-send], and known limitations.
 
 ## Threat model
 
-Send is **end-to-end encrypted between sender and recipient browsers**. The
+SND is **end-to-end encrypted between sender and recipient browsers**. The
 server stores ciphertext plus a small amount of plaintext metadata (file id,
 nonce, owner token hash, expiry, download counter). The decryption key lives
 in the URL fragment (the part after `#`) and never reaches the server.
@@ -99,7 +99,7 @@ webpack 4 / babel 6 sub-tree pulled in through `extract-loader`,
 runtime; clearing them fully requires a webpack 4 → 5 migration, which is
 out of scope here.
 
-See the [dependency-update PR](https://github.com/tarnover/send/pull/3) for
+See the [dependency-update PR](https://github.com/tarnover/snd/pull/3) for
 the full before/after audit and the list of `npm overrides` used to bump
 transitive packages.
 
@@ -111,8 +111,8 @@ transitive packages.
   at an attacker-controlled host, the attacker can mint tokens. The
   workaround is to pin `FXA_URL` and serve it over HTTPS.
 - **Host header trust under `DETECT_BASE_URL=true`** — opt-in. If you turn
-  this on, put Send behind a reverse proxy that strips/normalizes the
-  `Host` header before the request reaches Send.
+  this on, put SND behind a reverse proxy that strips/normalizes the
+  `Host` header before the request reaches SND.
 - **`base_url`** is set to the canonical tarnover deployment. Self-hosted
   operators must override `BASE_URL` (or set `DETECT_BASE_URL=true`);
   otherwise the share links they emit will point at the upstream
@@ -121,7 +121,7 @@ transitive packages.
 ## Reporting
 
 Please open a private security advisory at
-<https://github.com/tarnover/send/security/advisories/new> rather than a
+<https://github.com/tarnover/snd/security/advisories/new> rather than a
 public issue.
 
 [ffsend]: https://github.com/tarnover/ffsend

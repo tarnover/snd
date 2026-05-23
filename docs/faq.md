@@ -1,7 +1,7 @@
-## How big of a file can I transfer with Send?
+## How big of a file can I transfer with SND?
 
-There is a 2GB file size limit built in to Send, but this may be changed by the
-hoster. Send encrypts and decrypts the files in the browser which is great for
+There is a 2GB file size limit built in to SND, but this may be changed by the
+hoster. SND encrypts and decrypts the files in the browser which is great for
 security but will tax your system resources.  In particular you can expect to
 see your memory usage go up by at least the size of the file when the transfer
 is processing.  You can see [the results of some
@@ -17,20 +17,20 @@ Many browsers support this standard and should work fine, but some have not
 implemented it yet (mobile browsers lag behind on this, in
 particular).
 
-## Why does Send require JavaScript?
+## Why does SND require JavaScript?
 
-Send uses JavaScript to:
+SND uses JavaScript to:
 
 - Encrypt and decrypt files locally on the client instead of the server.
 - Render the user interface.
-- Manage translations on the website into [various different languages](https://github.com/tarnover/send#localization).
+- Manage translations on the website into [various different languages](https://github.com/tarnover/snd#localization).
 - (Original upstream only) Collect data in accordance with the operator's stated terms. This fork does not ship any analytics or telemetry. Each operator is responsible for documenting their own privacy practices.
 
-Since Send is an open-source project, you can read the source at <https://github.com/tarnover/send>.
+Since SND is an open-source project, you can read the source at <https://github.com/tarnover/snd>.
 
 ## Is there a command-line client?
 
-Yes — [`ffsend`](https://github.com/tarnover/ffsend), built by Tim Visee, is a fully-featured CLI that speaks the Send protocol. It can upload, download, set/clear passwords, change params, and delete shares. It is the recommended client for any sensitive workflow because, unlike the web UI, it doesn't trust the operator to ship correct JavaScript.
+Yes — [`ffsend`](https://github.com/tarnover/ffsend), built by Tim Visee, is a fully-featured CLI that speaks the SND protocol. It can upload, download, set/clear passwords, change params, and delete shares. It is the recommended client for any sensitive workflow because, unlike the web UI, it doesn't trust the operator to ship correct JavaScript.
 
 ## How long are files available for?
 
@@ -39,8 +39,8 @@ from the server.  They are also removed immediately once the download limit is r
 
 ## Can a file be downloaded more than once?
 
-Yes, once a file is submitted to Send you can select the download limit.
+Yes, once a file is submitted to SND you can select the download limit.
 
 
-*Disclaimer: Send is an experiment and under active development.  The answers
+*Disclaimer: SND is an experiment and under active development.  The answers
 here may change as we get feedback from you and the project matures.*
