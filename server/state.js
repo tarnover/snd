@@ -16,10 +16,11 @@ module.exports = async function(req) {
     }
   })();
   let authConfig = null;
-  let robots = 'none';
-  if (req.route && req.route.path === '/') {
-    robots = 'all';
-  }
+  // SND is privacy-focused: no route should be indexed by default,
+  // including the marketing home page. Operators wanting their public
+  // instance crawlable can override the meta tag at the reverse-proxy
+  // layer if needed.
+  const robots = 'noindex, nofollow';
   if (config.fxa_client_id) {
     try {
       authConfig = await getFxaConfig();
