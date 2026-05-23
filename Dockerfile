@@ -29,6 +29,13 @@ USER app
 WORKDIR /app
 
 RUN set -x \
+    # Network resilience for npm ci under qemu emulation (arm64) where
+    # ECONNRESET against the npm registry is common. Defaults are
+    # fetch-retries=2 / fetch-timeout=300000; bumping both.
+    && npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 600000 \
     # Build
     && PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci \
     && npm run build
@@ -62,7 +69,13 @@ COPY --chown=app:app public/locales public/locales
 COPY --chown=app:app server server
 COPY --chown=app:app --from=builder /app/dist dist
 
-RUN npm ci --production && npm cache clean --force
+RUN set -x \
+    && npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 600000 \
+    && npm ci --production \
+    && npm cache clean --force
 RUN mkdir -p /app/.config/configstore
 RUN ln -s dist/version.json version.json
 
