@@ -65,7 +65,7 @@ module.exports = function(state, body = '') {
         <link
           rel="mask-icon"
           href="${state.ui.assets.safari_pinned_tab}"
-          color="#838383"
+          color="#a8d4a8"
         />
         <script defer src="${assets.get('app.js')}"></script>
       </head>
