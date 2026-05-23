@@ -40,6 +40,14 @@ CLI as well as the browser.
 - **CVE clean production tree** — dep audit landed all known production
   advisories down to a single low-severity SDK-EOL warning. See the
   [deps PR](https://github.com/tarnover/send/pull/3) for the full diff.
+  The remaining `npm audit` and deprecation noise (visible during
+  `docker build` and `npm ci`) is **entirely in the dev / build chain**
+  — webpack 4 + babel 6 + extract-text / extract / html / copy loaders
+  — and never reaches the runtime image. The Docker runtime stage
+  installs only production deps via `npm ci --production` and is built
+  from a clean tree. Clearing the dev-chain noise requires a webpack-5
+  migration which is tracked but out of scope for this fork's current
+  direction.
 - **Short share path** — public download links are `/<base>/dl/<id>/#<key>`
   instead of the longer `/download/...` (the legacy path 301-redirects).
 
