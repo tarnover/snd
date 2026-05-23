@@ -124,7 +124,7 @@ multiple clients:
 
 | Client | Description |
 |---|---|
-| **Browser** — _this repository_ | Drag-and-drop web UI, no install required. Works in mobile browsers. |
+| **Browser** — _this repository_ | Drag-and-drop web UI, no install required. Works in mobile browsers. Also installable as a [Progressive Web App](#install-as-a-progressive-web-app) for a standalone-app feel. |
 | **Command-line** — [`sndr`][sndr] | Native CLI for SND, descended from [`ffsend`][ffsend] (by [@timvisee](https://github.com/timvisee)). Cross-platform, scriptable, supports the full protocol (upload, download, params, password, delete). The recommended client for sensitive transfers because it avoids the operator-shipped-JS class of risks that fundamentally limit any browser-based E2EE app. Runs on Android via Termux. |
 | **Thunderbird** | The [FileLink provider for Send](https://addons.thunderbird.net/thunderbird/addon/filelink-provider-for-send/) extension lets you attach via a hosted SND instance from inside Thunderbird. |
 
@@ -135,6 +135,29 @@ web UI in their browser or `sndr`.
 
 If you operate a public SND instance and want to recommend a single client to
 users for security-critical use, point them at `sndr`.
+
+### Install as a Progressive Web App
+
+SND ships a Web App Manifest with the new brand mark, so any deployed
+instance can be installed as a Progressive Web App from a modern browser.
+The result is a standalone app window with the SND square-mono-`S` icon in
+your dock / taskbar / launcher and no browser chrome — same site, same
+behaviour, just out of the tab strip.
+
+After visiting your instance:
+
+- **Desktop Chromium** (Chrome, Edge, Brave, Arc, Opera) — click the install
+  icon at the right of the address bar, or `⋮ → Install SND`.
+- **Android Chrome** — `⋮ → Install app` (or "Add to Home screen" on older
+  builds). Installs as a real app on your home screen and in your app drawer.
+- **iOS / iPadOS Safari** — share button → "Add to Home Screen".
+- **Firefox desktop** — no native PWA install (Mozilla removed the feature in
+  Firefox 87). Use a Chromium browser, or just keep SND as a pinned tab.
+
+No operator action is required — the manifest, icons, and theme color are
+already in place. If you've customised the brand via `UI_CUSTOM_ASSETS_*`
+config (see [docs/docker.md](docs/docker.md)), those icons flow through to
+the PWA install as well.
 
 ---
 
