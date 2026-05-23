@@ -661,6 +661,24 @@ send-upload-area {
   margin-bottom: 16px;
 }
 
+/* Archive-tile filename — truncate with mid-ellipsis-style end ellipsis,
+   full name available via title attribute on hover */
+.snd-tile-meta {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.snd-tile-name {
+  font-family: var(--snd-font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--snd-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Download-complete hero — nested squares with sage check */
 .snd-complete {
   gap: 20px;
