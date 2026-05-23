@@ -1,5 +1,149 @@
 ## Change Log
 
+### v4.0.0 (2026/05/23) — First SND release
+
+First release under the SND identity. The product was renamed from "Send"
+(via `timvisee/send` 3.4.x and `mozilla/send` before that) and the GitHub
+home moved to [`tarnover/snd`](https://github.com/tarnover/snd). Container
+images now publish to `ghcr.io/tarnover/snd`.
+
+The HTTP/WebSocket protocol, file format, encryption scheme, Redis schema,
+and configuration option names are all **unchanged** from 3.4.27 — SND
+remains protocol-compatible with [`ffsend`](https://github.com/tarnover/ffsend)
+and with `timvisee/send` 3.4.x deployments. Existing operator configs
+continue to work; the only operator-visible default changes are documented
+below ("Defaults flipped").
+
+#### Security hardening
+
+Landed via [PR #1](https://github.com/tarnover/snd/pull/1) and follow-ups.
+See [docs/security.md](docs/security.md) for the full audit.
+
+- **Atomic download-count enforcement** — concurrent requests sharing one
+  `Authorization` header used to all read the same `meta.dl` and stream
+  past `dlimit`. Fixed with an atomic `HINCRBY` claim-before-stream pattern
+  with refund on cancel/error.
+- **PBKDF2 iterations** raised from 100 to 100,000 for password-protected
+  share auth-key derivation. Closes a ~1000× under-iteration vs OWASP.
+- **Strict `Authorization` header parsing** on upload + WebSocket. Rejects
+  malformed headers that previously caused `auth.split(' ')[1]` to be
+  `undefined` and Redis to serialize the literal string `"undefined"` as
+  the HMAC key — a predictable buffer anyone could forge against.
+- **`FXA_REQUIRED` actually works** — the config key was referenced in
+  middleware but never declared in the convict schema, so operators
+  setting `FXA_REQUIRED=true` to enforce account-only uploads got a
+  silent no-op.
+- **`dlimit` input validation** — both `params` and `ws` now require a
+  positive integer no greater than `max_downloads` (was accepting
+  negative, fractional, and non-numeric values; a negative `dlimit`
+  used to delete the file on the first download).
+- **S3 storage isolation** — stopped mutating the global `AWS.config`
+  singleton; per-bucket config now passes directly to `new AWS.S3(cfg)`.
+- **`base64url` accepted in auth headers** — the browser SPA emits
+  URL-safe base64 via `arrayToB64`; the strict format check landed in
+  the security pass had used a standard-base64-only regex, rejecting
+  every real browser upload. Both alphabets now accepted (Node's
+  `Buffer.from(_, 'base64')` decodes them identically).
+
+#### Visual redesign — "Vault"
+
+End-to-end visual restyle to a quiet, technical aesthetic. Sage palette,
+hairline borders, no rounded corners, no drop shadows. Inter + JetBrains
+Mono (self-hosted woff2). All existing screens (upload-idle, in-progress,
+share-complete, recipient download, password gate, my-uploads, dialogs)
+ported to the new design system. Mobile (≤768px) defaults the share
+screen to an expanded inline QR. See `docs/superpowers/specs/` for the
+full spec and `docs/superpowers/plans/` for the implementation plan.
+
+#### Brand rename — Send → SND
+
+Every English-source product-name string updated to strict uppercase
+**SND**: locale ftl files across 86 locales, server `custom_title` default,
+hardcoded brand literals in JS, archive zip filename (`SND-Archive.zip`),
+OCI image labels, README, and all of `docs/`. GitHub repo URL refs
+updated from `github.com/tarnover/send` to `github.com/tarnover/snd`.
+Container image moved from `ghcr.io/tarnover/send` → `ghcr.io/tarnover/snd`.
+
+Preserved as historical proper nouns: "Firefox Send", `mozilla/send`,
+`timvisee/send`, and `send.firefox.com`.
+
+#### Favicon + brand mark
+
+22×22 mono-S in a sage-outlined square on a Vault-bg fill. Tab favicons
+(16, 32, 64), apple-touch (180), and Android Chrome PWA icons (192, 512)
+all regenerated. Safari pinned-tab mask icon also replaced — the old
+Firefox Send mask was carrying over. `mask-icon` color in `layout.js`
+flipped from mid-grey to sage so Safari tints the pinned tab on-brand.
+
+#### Defaults flipped
+
+These default values shift in 4.0.0. Operators who relied on the previous
+behavior can override at the config / reverse-proxy layer; nothing about
+the override mechanism changed.
+
+- `server/config.js` `custom_title` default `'Snd'` → `'SND'`.
+- Theme color (`<meta name="theme-color">`) `#220033` → `#0e0f0d` to match
+  the Vault background.
+- Robots policy — **every route is now `noindex, nofollow, noarchive,
+  nosnippet` by default**, including the home page. Previously `/` was
+  emitted as `all,noarchive` (indexable) on the assumption SND would be
+  a public marketing landing. `public/robots.txt` already denied all
+  paths via `User-agent: * / Disallow: /` — the meta tag is now
+  belt-and-suspenders.
+- Background image (`assets/bg.svg`) removed — body background is the
+  flat Vault `#0e0f0d`.
+
+#### Build / CI / dev-chain
+
+- **Dev/prod build repair** — the CVE-clearance dep bumps had
+  inadvertently broken `npm run build`, `npm run start`, and
+  `npm run test:backend` against a pristine `npm install` (transitive
+  `webcrypto-core` was github-sourced without a built `dist/`, `uuid`
+  v11 broke `webpack-log`'s `uuid/v4` subpath import, and `minimatch`
+  v9 broke `test-exclude`'s function-call shape). Targeted nested
+  overrides in `package.json` keep the main CVE posture while injecting
+  legacy versions only into the dev-only transitive trees.
+- **Docker workflow split** — multi-arch Docker build is now
+  matrix-on-platform with `nick-fields/retry@v3` per platform. A
+  transient ECONNRESET on arm64 (common under qemu emulation) now
+  retries that platform only without restarting amd64. A separate
+  `merge` job stitches the per-platform digests into the final
+  manifest list.
+- **Webpack 5 migration deferred** — `npm audit` against the dev tree
+  still reports ~56 vulns inside `webpack 4 / babel 6 / extract-text /
+  extract / html / copy loaders`. None reach the runtime image — the
+  Dockerfile's runtime stage uses `npm ci --production` and gets a
+  clean tree (1 low advisory only, the aws-sdk v2 EOL warning).
+
+#### Dependency clean-up
+
+- `aws-sdk` 2.1109 → 2.1693 (latest v2; migration to v3 deferred).
+- `express` 4.17.3 → 4.21.2 (path-to-regexp, qs CVE fixes).
+- `body-parser` 1.20.0 → 1.20.3.
+- `helmet` stays on 3.x (newer Helmet drops Node 16 support).
+- Many transitive bumps via `package.json` overrides to clear CVEs
+  without churning the whole webpack 4 build chain.
+- **Removed**: Sentry telemetry (server + client + Android), the
+  abandoned `android/` and `ios/` WebView wrappers (hard-coded the
+  dead `send.firefox.com` service), CircleCI / GitLab CI configs, and
+  the WDIO/Selenium integration scaffolding.
+
+#### Acknowledgements
+
+This release stands on the work of:
+
+- **Mozilla**, who built the original [Firefox Send](https://github.com/mozilla/send)
+  and open-sourced both the client encryption protocol and the entire
+  codebase under MPL-2.0.
+- **Tim Visee** ([@timvisee](https://github.com/timvisee)), who kept the
+  service alive after Mozilla discontinued it — both as the
+  [`timvisee/send`](https://github.com/timvisee/send) server fork and
+  as the [`ffsend`](https://github.com/timvisee/ffsend) CLI.
+- The localization contributors listed in
+  [CONTRIBUTORS](CONTRIBUTORS).
+
+---
+
 ### v2.5.1 (2018/03/12 19:26 +00:00)
 - [#789](https://github.com/mozilla/send/pull/789) Fixed #775 : Made text not-selectable (@RCMainak)
 

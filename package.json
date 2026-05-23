@@ -1,13 +1,13 @@
 {
-  "name": "send",
-  "description": "File Sharing Experiment",
-  "version": "3.4.27",
+  "name": "snd",
+  "description": "Privacy-friendly, browser-encrypted file sharing",
+  "version": "4.0.0",
   "author": "Mozilla (https://mozilla.org)",
   "contributors": [
     "Tim Visee <3a4fb3964f@sinenomine.email> (https://timvisee.com)"
   ],
-  "repository": "gitlab:timvisee/send",
-  "homepage": "https://gitlab.com/timvisee/send/",
+  "repository": "github:tarnover/snd",
+  "homepage": "https://github.com/tarnover/snd",
   "license": "MPL-2.0",
   "private": true,
   "scripts": {
