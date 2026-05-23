@@ -25,7 +25,7 @@ is in turn a fork of [Mozilla's Firefox Send][mozilla-send] (discontinued in
 mozilla/send  →  timvisee/send  →  tarnover/snd (this repo)
 ```
 
-The protocol stays compatible with the [`ffsend`][ffsend] command-line client
+The protocol stays compatible with the [`sndr`][sndr] command-line client
 so links produced by this server can be uploaded to / downloaded from with the
 CLI as well as the browser.
 
@@ -54,7 +54,8 @@ CLI as well as the browser.
 Everything else — protocol, file format, web UI, configuration knobs — is
 unchanged and remains compatible with downstream tooling.
 
-[ffsend]: https://github.com/tarnover/ffsend
+[sndr]: https://github.com/tarnover/snder
+[ffsend]: https://github.com/timvisee/ffsend
 [mozilla-send]: https://github.com/mozilla/send
 [timvisee-send]: https://github.com/timvisee/send
 
@@ -124,16 +125,16 @@ multiple clients:
 | Client | Description |
 |---|---|
 | **Browser** — _this repository_ | Drag-and-drop web UI, no install required. Works in mobile browsers. |
-| **Command-line** — [`ffsend`][ffsend] | Native CLI by [@timvisee](https://github.com/timvisee). Cross-platform, scriptable, supports the full protocol (upload, download, params, password, delete). The recommended client for sensitive transfers because it avoids the operator-shipped-JS class of risks that fundamentally limit any browser-based E2EE app. Runs on Android via Termux. |
+| **Command-line** — [`sndr`][sndr] | Native CLI for SND, descended from [`ffsend`][ffsend] (by [@timvisee](https://github.com/timvisee)). Cross-platform, scriptable, supports the full protocol (upload, download, params, password, delete). The recommended client for sensitive transfers because it avoids the operator-shipped-JS class of risks that fundamentally limit any browser-based E2EE app. Runs on Android via Termux. |
 | **Thunderbird** | The [FileLink provider for Send](https://addons.thunderbird.net/thunderbird/addon/filelink-provider-for-send/) extension lets you attach via a hosted SND instance from inside Thunderbird. |
 
 The legacy `android/` and `ios/` WebView wrappers carried by upstream
 `mozilla/send` were unmaintained, hard-coded the dead `send.firefox.com`
 service, and have been removed from this fork. Mobile users should use the
-web UI in their browser or `ffsend`.
+web UI in their browser or `sndr`.
 
 If you operate a public SND instance and want to recommend a single client to
-users for security-critical use, point them at `ffsend`.
+users for security-critical use, point them at `sndr`.
 
 ---
 
