@@ -638,6 +638,185 @@ send-upload-area {
   }
 }
 
+/* How-it-works dialog */
+.snd-how {
+  display: block;
+  position: relative;
+}
+
+.snd-how-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: transparent;
+  border: 0;
+  color: var(--snd-mute);
+  font-size: 24px;
+  line-height: 1;
+  padding: 8px;
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+
+.snd-how-close:hover {
+  color: var(--snd-text);
+}
+
+.snd-how-title {
+  margin: 0 0 8px;
+}
+
+.snd-how-lede {
+  margin: 0 0 24px;
+  color: var(--snd-mute);
+  max-width: 44ch;
+}
+
+.snd-how-diagram {
+  margin: 0 0 24px;
+  padding: 16px 0 8px;
+  border-top: 1px solid var(--snd-line);
+  border-bottom: 1px solid var(--snd-line);
+}
+
+.snd-how-diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.snd-how-packet {
+  transform: translate(78px, 70px);
+  animation: snd-how-fly 4.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+.snd-how-packet rect {
+  animation: snd-how-lock 4.2s steps(1, end) infinite;
+}
+
+@keyframes snd-how-fly {
+  0% {
+    transform: translate(78px, 70px);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  46% {
+    transform: translate(240px, 70px);
+    opacity: 1;
+  }
+
+  54% {
+    transform: translate(240px, 70px);
+    opacity: 1;
+  }
+
+  92% {
+    transform: translate(402px, 70px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(402px, 70px);
+    opacity: 0;
+  }
+}
+
+@keyframes snd-how-lock {
+  0%,
+  8% {
+    fill: var(--snd-mute);
+  }
+
+  9%,
+  92% {
+    fill: var(--snd-accent);
+  }
+
+  93%,
+  100% {
+    fill: var(--snd-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snd-how-packet,
+  .snd-how-packet rect {
+    animation: none;
+  }
+
+  .snd-how-packet {
+    transform: translate(240px, 70px);
+  }
+}
+
+.snd-how-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.snd-how-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.snd-how-step-num {
+  font-family: var(--snd-font-mono);
+  font-size: 11px;
+  color: var(--snd-accent);
+  letter-spacing: 0.1em;
+  padding-top: 2px;
+  flex: 0 0 auto;
+  min-width: 24px;
+}
+
+.snd-how-step-title {
+  font-family: var(--snd-font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--snd-text);
+  margin: 0 0 4px;
+  letter-spacing: -0.005em;
+}
+
+.snd-how-step-body {
+  font-family: var(--snd-font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--snd-mute);
+  margin: 0;
+}
+
+.snd-how-foot {
+  color: var(--snd-dim);
+  letter-spacing: 0.04em;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.snd-how-cta {
+  margin-top: 0;
+}
+
+@media (max-width: 480px) {
+  .snd-how-close {
+    top: -4px;
+    right: -4px;
+  }
+
+  .snd-how-step {
+    gap: 12px;
+  }
+}
+
 /* QR card */
 .snd-qr-card {
   display: inline-flex;
