@@ -2,6 +2,7 @@ import FileReceiver from './fileReceiver';
 import FileSender from './fileSender';
 import copyDialog from './ui/copyDialog';
 import faviconProgressbar from './ui/faviconProgressbar';
+import howItWorksDialog from './ui/howItWorksDialog';
 import okDialog from './ui/okDialog';
 import shareDialog from './ui/shareDialog';
 import signupDialog from './ui/signupDialog';
@@ -262,6 +263,11 @@ export default function(state, emitter) {
 
   emitter.on('copy', ({ url }) => {
     copyToClipboard(url);
+  });
+
+  emitter.on('showHowItWorks', () => {
+    state.modal = howItWorksDialog();
+    render();
   });
 
   emitter.on('closeModal', () => {

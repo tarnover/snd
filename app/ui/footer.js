@@ -2,9 +2,10 @@ const html = require('choo/html');
 const Component = require('choo/component');
 
 class Footer extends Component {
-  constructor(name, state) {
+  constructor(name, state, emit) {
     super(name);
     this.state = state;
+    this.emit = emit;
   }
 
   update() {
@@ -13,9 +14,23 @@ class Footer extends Component {
 
   createElement() {
     const translate = this.state.translate;
+    const emit = this.emit;
+
+    const onHowItWorks = e => {
+      e.preventDefault();
+      emit('showHowItWorks');
+    };
 
     // Add additional links from configuration if available
-    var links = [];
+    var links = [
+      html`
+        <li class="snd-footer-item">
+          <a href="#" onclick=${onHowItWorks}>
+            ${translate('footerLinkHowItWorks')}
+          </a>
+        </li>
+      `
+    ];
     if (this.state != undefined && this.state.WEB_UI != undefined) {
       const WEB_UI = this.state.WEB_UI;
 
