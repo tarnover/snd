@@ -6,15 +6,25 @@ module.exports = function howItWorksDialog() {
 
     return html`
       <send-how-dialog class="snd-how">
-        <button
-          class="snd-how-close"
-          onclick=${close}
-          aria-label="${t('howItWorksCloseLabel')}"
-        >
-          ×
-        </button>
+        <header class="snd-how-head">
+          <h2 class="snd-display snd-how-title">${t('howItWorksTitle')}</h2>
+          <button
+            type="button"
+            class="snd-how-close"
+            onclick=${close}
+            aria-label="${t('howItWorksCloseLabel')}"
+          >
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+              <line x1="3" y1="3" x2="13" y2="13"
+                    stroke="currentColor" stroke-width="1.75"
+                    stroke-linecap="round"/>
+              <line x1="13" y1="3" x2="3" y2="13"
+                    stroke="currentColor" stroke-width="1.75"
+                    stroke-linecap="round"/>
+            </svg>
+          </button>
+        </header>
 
-        <h2 class="snd-display snd-how-title">${t('howItWorksTitle')}</h2>
         <p class="snd-body-sm snd-how-lede">${t('howItWorksLede')}</p>
 
         ${diagram(t)}
