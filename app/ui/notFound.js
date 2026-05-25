@@ -15,21 +15,19 @@ module.exports = function(state, emit) {
             <line x1="35" y1="65" x2="65" y2="35" stroke="var(--snd-mute)" stroke-width="2" stroke-linecap="square"/>
           </svg>
         </div>
-        <p class="snd-tag snd-text-dim">EXPIRED</p>
-        <h1 class="snd-display text-center">
+        <p class="snd-tag snd-text-dim">${state.translate('expiredTag')}</p>
+        <h1 class="snd-display">
           ${state.translate('expiredTitle')}
         </h1>
         <p class="snd-caption snd-text-dim">
-          > share no longer available · file removed from server
+          ${state.translate('expiredCaption')}
         </p>
-        <p class="snd-body snd-text-mute text-center ${state.user.loggedIn ? 'hidden' : ''}">
+        <p class="snd-body snd-text-mute ${state.user.loggedIn ? 'hidden' : ''}">
           ${state.translate('trySendDescription')}
         </p>
-        <p>
-          <a href="/" class="snd-btn snd-btn--primary" role="button">
-            ${state.translate(btnText)}
-          </a>
-        </p>
+        <a href="/" class="snd-btn snd-btn--primary" role="button">
+          ${state.translate(btnText)}
+        </a>
       </section>
     </main>
   `;
