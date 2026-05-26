@@ -9,9 +9,7 @@ const express = require('express');
 const devRoutes = require('../../server/bin/test');
 const app = express();
 
-const wpm = middleware(webpack(config(null, { mode: 'development' })), {
-  logLevel: 'silent'
-});
+const wpm = middleware(webpack(config(null, { mode: 'development' })));
 app.use(wpm);
 devRoutes(app, { middleware: wpm });
 
