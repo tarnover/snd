@@ -73,7 +73,7 @@ class Footer extends Component {
     } else {
       links.push(html`
         <li class="snd-footer-item">
-          <a href="https://github.com/tarnover/send" target="_blank">
+          <a href="https://github.com/tarnover/snd" target="_blank">
             ${translate('footerLinkSource')}
           </a>
         </li>
