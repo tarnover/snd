@@ -246,7 +246,7 @@ const conf = convict({
   },
   footer_source_url: {
     format: String,
-    default: 'https://github.com/tarnover/send',
+    default: 'https://github.com/tarnover/snd',
     env: 'SEND_FOOTER_SOURCE_URL'
   },
   custom_footer_text: {

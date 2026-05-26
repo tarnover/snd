@@ -21,7 +21,6 @@ module.exports = function(state, emit) {
 
       <form class="snd-password-form ${invalid ? 'is-invalid' : ''}"
             onsubmit="${checkPassword}" data-no-csrf>
-        <input id="autocomplete-decoy" type="password" value="lol" style="display:none"/>
         <input id="password-input"
                class="snd-input snd-input--mask"
                maxlength="4096"

@@ -75,7 +75,7 @@ module.exports = function(state, body = '') {
           <p>
             <a
               class="link"
-              href="https://github.com/tarnover/send/blob/master/docs/faq.md#why-does-send-require-javascript"
+              href="https://github.com/tarnover/snd/blob/master/docs/faq.md#why-does-send-require-javascript"
             >
               ${state.translate('whyJavascript')}
             </a>

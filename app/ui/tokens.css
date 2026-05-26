@@ -572,6 +572,18 @@ send-upload-area {
   border-bottom-color: var(--snd-danger);
 }
 
+/* stylelint-disable no-descending-specificity */
+.snd-input:-webkit-autofill,
+.snd-input:-webkit-autofill:hover,
+.snd-input:-webkit-autofill:focus,
+.snd-input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--snd-text);
+  caret-color: var(--snd-text);
+  box-shadow: 0 0 0 1000px var(--snd-bg) inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+/* stylelint-enable no-descending-specificity */
+
 .is-hidden {
   visibility: hidden;
 }
