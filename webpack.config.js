@@ -1,16 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const VersionPlugin = require('./build/version_plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-// Fix for node 18+
-// See: <https://stackoverflow.com/a/78005686/1000145>
-const crypto = require('crypto');
-const crypto_orig_createHash = crypto.createHash;
-crypto.createHash = algorithm =>
-  crypto_orig_createHash(algorithm == 'md4' ? 'sha256' : algorithm);
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const webJsOptions = {
   babelrc: false,
@@ -67,17 +60,15 @@ const serviceWorker = {
             options: {
               plugins: [
                 {
-                  name: 'removeViewBox',
-                  active: false // true causes stretched images
+                  name: 'preset-default',
+                  params: {
+                    overrides: {
+                      removeViewBox: false // true causes stretched images
+                    }
+                  }
                 },
-                {
-                  name: 'convertStyleToAttrs',
-                  active: true // for CSP, no unsafe-eval
-                },
-                {
-                  name: 'removeTitle',
-                  active: true // for smallness
-                }
+                'convertStyleToAttrs', // for CSP, no unsafe-eval
+                'removeTitle' // for smallness
               ]
             }
           }
@@ -90,7 +81,16 @@ const serviceWorker = {
       }
     ]
   },
-  plugins: [new webpack.IgnorePlugin(/\.\.\/dist/)]
+  plugins: [
+    new webpack.IgnorePlugin({ resourceRegExp: /\.\.\/dist/ }),
+    new webpack.ProvidePlugin({ Buffer: ['buffer', 'Buffer'] })
+  ],
+  resolve: {
+    fallback: {
+      buffer: require.resolve('buffer/'),
+      path: require.resolve('path-browserify')
+    }
+  }
 };
 
 const web = {
@@ -101,7 +101,8 @@ const web = {
   output: {
     chunkFilename: '[name].[contenthash:8].js',
     filename: '[name].[contenthash:8].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: ''
   },
   module: {
     rules: [
@@ -165,21 +166,16 @@ const web = {
             options: {
               plugins: [
                 {
-                  name: 'cleanupIDs',
-                  active: false
+                  name: 'preset-default',
+                  params: {
+                    overrides: {
+                      cleanupIds: false, // ids referenced by CSS/JS
+                      removeViewBox: false // true causes stretched images
+                    }
+                  }
                 },
-                {
-                  name: 'removeViewBox',
-                  active: false // true causes stretched images
-                },
-                {
-                  name: 'convertStyleToAttrs',
-                  active: true // for CSP, no unsafe-eval
-                },
-                {
-                  name: 'removeTitle',
-                  active: true // for smallness
-                }
+                'convertStyleToAttrs', // for CSP, no unsafe-eval
+                'removeTitle' // for smallness
               ]
             }
           }
@@ -188,18 +184,17 @@ const web = {
       {
         // creates style.css with all styles
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                importLoaders: 1,
-                esModule: false
-              }
-            },
-            'postcss-loader'
-          ]
-        })
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              esModule: false
+            }
+          },
+          'postcss-loader'
+        ]
       },
       {
         test: /\.ftl$/,
@@ -227,27 +222,41 @@ const web = {
       ]
     }),
     new webpack.EnvironmentPlugin(['NODE_ENV']),
-    new webpack.IgnorePlugin(/\.\.\/dist/), // used in common/*.js
-    new ExtractTextPlugin({
-      filename: '[name].[md5:contenthash:8].css'
+    new webpack.IgnorePlugin({ resourceRegExp: /\.\.\/dist/ }), // used in common/*.js
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer']
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash:8].css'
     }),
     new VersionPlugin(), // used for the /__version__ route
-    new ManifestPlugin() // used by server side to resolve hashed assets
+    new WebpackManifestPlugin() // used by server side to resolve hashed assets
   ],
+  resolve: {
+    fallback: {
+      buffer: require.resolve('buffer/'),
+      path: require.resolve('path-browserify')
+    }
+  },
   devtool: 'source-map',
   devServer: {
-    before:
-      process.env.NODE_ENV === 'development' && require('./server/bin/dev'),
+    setupMiddlewares: (middlewares, devServer) => {
+      if (process.env.NODE_ENV === 'development') {
+        require('./server/bin/dev')(devServer.app, devServer);
+      }
+      return middlewares;
+    },
     compress: true,
     hot: false,
     host: '0.0.0.0',
-    proxy: {
-      '/api/ws': {
+    proxy: [
+      {
+        context: ['/api/ws'],
         target: 'ws://localhost:8081',
         ws: true,
         secure: false
       }
-    }
+    ]
   }
 };
 

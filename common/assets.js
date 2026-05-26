@@ -31,11 +31,12 @@ const instance = {
   match: getMatches,
   setMiddleware: function(middleware) {
     function getManifest() {
-      return JSON.parse(
-        middleware.fileSystem.readFileSync(
-          middleware.getFilenameFromUrl('/manifest.json')
-        )
-      );
+      // webpack-dev-middleware v5+: outputFileSystem lives on context
+      const fs = middleware.context
+        ? middleware.context.outputFileSystem
+        : middleware.fileSystem;
+      const file = middleware.getFilenameFromUrl('/manifest.json');
+      return JSON.parse(fs.readFileSync(file));
     }
     if (middleware) {
       instance.get = function getAssetWithMiddleware(name) {
