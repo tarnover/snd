@@ -1,5 +1,3 @@
-/* global TransformStream */
-
 export function transformStream(readable, transformer, oncancel) {
   try {
     return readable.pipeThrough(new TransformStream(transformer));
