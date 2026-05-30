@@ -56,7 +56,7 @@
     "cache": true
   },
   "engines": {
-    "node": "^16.13.0"
+    "node": ">=20.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",

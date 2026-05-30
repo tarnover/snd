@@ -5,7 +5,7 @@
 ##
 
 # Build project
-FROM node:16.13-alpine3.13 AS builder
+FROM node:20-alpine AS builder
 
 RUN set -x \
   # Change node uid/gid
@@ -36,12 +36,14 @@ RUN set -x \
     && npm config set fetch-retry-mintimeout 20000 \
     && npm config set fetch-retry-maxtimeout 120000 \
     && npm config set fetch-timeout 600000 \
-    # Build
-    && PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci \
+    # Build. --legacy-peer-deps: the lockfile is resolved that way
+    # (e.g. raw-loader@3 peer-requires webpack 4 while we run webpack 5);
+    # npm 10's strict ci peer enforcement otherwise rejects it.
+    && PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci --legacy-peer-deps \
     && npm run build
 
 # Main image
-FROM node:16.13-alpine3.13
+FROM node:20-alpine
 
 RUN set -x \
   # Change node uid/gid
@@ -74,7 +76,7 @@ RUN set -x \
     && npm config set fetch-retry-mintimeout 20000 \
     && npm config set fetch-retry-maxtimeout 120000 \
     && npm config set fetch-timeout 600000 \
-    && npm ci --production \
+    && npm ci --omit=dev --legacy-peer-deps \
     && npm cache clean --force
 RUN mkdir -p /app/.config/configstore
 RUN ln -s dist/version.json version.json
