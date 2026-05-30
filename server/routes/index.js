@@ -38,9 +38,7 @@ module.exports = function(app) {
           "'self'",
           function(req) {
             const baseUrl = config.deriveBaseUrl(req);
-            const r = baseUrl.replace(/^http(s?):\/\//, 'ws$1://');
-            console.log([baseUrl, r]);
-            return r;
+            return baseUrl.replace(/^http(s?):\/\//, 'ws$1://');
           }
         ],
         imgSrc: ["'self'", 'data:'],
@@ -56,6 +54,12 @@ module.exports = function(app) {
             return `'nonce-${req.cspNonce}'`;
           }
         ],
+        // the service worker decrypts downloads; keep it same-origin
+        workerSrc: ["'self'"],
+        // the app sets its own same-origin <base>; block cross-origin
+        // base rewriting, nested browsing contexts, and plugins
+        baseUri: ["'self'"],
+        frameSrc: ["'none'"],
         formAction: ["'none'"],
         frameAncestors: ["'none'"],
         objectSrc: ["'none'"],

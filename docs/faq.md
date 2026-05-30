@@ -28,9 +28,40 @@ SND uses JavaScript to:
 
 Since SND is an open-source project, you can read the source at <https://github.com/tarnover/snd>.
 
+## Is the web UI "zero-knowledge"?
+
+Not in the strong sense the term usually implies, and we deliberately don't
+market it that way. The web UI is **end-to-end encrypted in your browser**:
+your file is encrypted before it leaves your device, the decryption key lives
+in the link fragment (after the `#`) and never reaches the server, and the
+server only ever stores ciphertext plus minimal metadata.
+
+The honest limitation is that the same server also ships the JavaScript that
+does the encryption. A passive breach of the server or storage can't read your
+files — but an *actively malicious or compromised* server could serve modified
+JavaScript that steals the key from the link. This is a structural property of
+**every** browser-delivered E2EE app, not specific to SND; tools that brand
+their web client "zero-knowledge" share this exact limitation whether they say
+so or not.
+
+What each client actually protects against:
+
+| Threat | Web UI | [`sndr`](https://github.com/tarnover/sndr) CLI |
+|---|---|---|
+| Reading file contents after a passive server/storage breach | ✅ | ✅ |
+| Reading filenames / sizes / types after a passive breach | ✅ | ✅ |
+| Network / TLS eavesdropper reading contents | ✅ | ✅ |
+| An actively malicious server serving targeted JS to steal the key | ❌ | ✅ |
+| The operator seeing IPs, file sizes, timing, or denying service | ❌ | ❌ |
+
+For workflows where the operator-shipped-JS risk is unacceptable, use the
+`sndr` command-line client: it ships its own copy of the protocol, so a
+malicious server can't swap out the crypto layer. See
+[`docs/security.md`](./security.md) for the full threat model.
+
 ## Is there a command-line client?
 
-Yes — [`ffsend`](https://github.com/tarnover/ffsend), built by Tim Visee, is a fully-featured CLI that speaks the SND protocol. It can upload, download, set/clear passwords, change params, and delete shares. It is the recommended client for any sensitive workflow because, unlike the web UI, it doesn't trust the operator to ship correct JavaScript.
+Yes — [`sndr`](https://github.com/tarnover/sndr) is a fully-featured CLI that speaks the SND protocol. It can upload, download, set/clear passwords, change params, and delete shares. It is the recommended client for any sensitive workflow because, unlike the web UI, it doesn't trust the operator to ship correct JavaScript.
 
 ## How long are files available for?
 
