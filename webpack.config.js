@@ -224,7 +224,10 @@ const web = {
     new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.IgnorePlugin({ resourceRegExp: /\.\.\/dist/ }), // used in common/*.js
     new webpack.ProvidePlugin({
-      Buffer: ['buffer', 'Buffer']
+      Buffer: ['buffer', 'Buffer'],
+      // assert polyfill (test bundle) needs process; require.resolve so
+      // .mjs deps (asmcrypto) get a fully-specified path
+      process: require.resolve('process/browser')
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash:8].css'
@@ -235,7 +238,10 @@ const web = {
   resolve: {
     fallback: {
       buffer: require.resolve('buffer/'),
-      path: require.resolve('path-browserify')
+      path: require.resolve('path-browserify'),
+      // only the frontend test bundle (dev mode) imports assert; lazy,
+      // so it stays out of the production app bundle
+      assert: require.resolve('assert/')
     }
   },
   devtool: 'source-map',

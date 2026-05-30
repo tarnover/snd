@@ -1,6 +1,3 @@
-const ece = require('http_ece');
-require('buffer');
-
 import assert from 'assert';
 import Archive from '../../../app/archive';
 import { b64ToArray } from '../../../app/utils';
@@ -15,16 +12,17 @@ const testSalt = 'I1BsxtFttlv3u_Oo94xnmw';
 const keystr = 'yqdlZ-tYemfogSmv7Ws5PQ';
 
 const buffer = Buffer.from(str);
-const params = {
-  version: 'aes128gcm',
-  rs: rs,
-  salt: testSalt,
-  keyid: '',
-  key: keystr
-};
 
-const encrypted = ece.encrypt(buffer, params);
-const decrypted = ece.decrypt(encrypted, params);
+// Reference ciphertext for the params { version: 'aes128gcm', rs: 36,
+// salt: testSalt, key: keystr }, produced once by the http_ece library
+// in Node. Frozen here as a golden vector so the browser test bundle
+// doesn't have to run the Node-only http_ece (and its node:crypto
+// dependency) in-browser. ECE/aes128gcm (RFC 8188) output is stable.
+const encrypted = Buffer.from(
+  'I1BsxtFttlv3u/Oo94xnmwAAACQA6J8B9PysG0UQpgbdfI4E2pBumJk+XsSviMkGvlSpyrsiKCXwIw8SNTVexOXMwoXXFbcrUth/qV/ZCMLiWQ78S7XTBFAXwaBazYaD2hM93TBw2xLZk3AGMVLF9XgSkzqbdkLj+6K8+tSYgmhvz6Xan0muK+wZZ1jbchmyMYvuyA==',
+  'base64'
+);
+const decrypted = buffer;
 
 describe('Streaming', function() {
   describe('blobStream', function() {
