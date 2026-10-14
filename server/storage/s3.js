@@ -39,6 +39,25 @@ class S3Storage {
     return this.s3.deleteObject({ Bucket: this.bucket, Key: id }).promise();
   }
 
+  async *list() {
+    let ContinuationToken;
+    do {
+      const result = await this.s3
+        .listObjectsV2({ Bucket: this.bucket, ContinuationToken })
+        .promise();
+      for (const object of result.Contents || []) {
+        yield {
+          id: object.Key,
+          size: Number(object.Size),
+          createdAt: object.LastModified.getTime()
+        };
+      }
+      ContinuationToken = result.IsTruncated
+        ? result.NextContinuationToken
+        : null;
+    } while (ContinuationToken);
+  }
+
   ping() {
     return this.s3.headBucket({ Bucket: this.bucket }).promise();
   }

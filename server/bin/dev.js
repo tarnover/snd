@@ -3,13 +3,17 @@ const routes = require('../routes');
 const pages = require('../routes/pages');
 const tests = require('../../test/frontend/routes');
 const express = require('express');
-const expressWs = require('@dannycoates/express-ws');
+const configureWebSockets = require('../websocket');
 const morgan = require('morgan');
 const config = require('../config');
 
 module.exports = function(app, devServer) {
   const wsapp = express();
-  expressWs(wsapp, null, { perMessageDeflate: false });
+  configureWebSockets(wsapp, {
+    perMessageDeflate: false,
+    maxPayload: require('../security').WS_MAX_PAYLOAD_BYTES,
+    maxConnections: require('../security').WS_MAX_CONNECTIONS
+  });
   routes(wsapp);
   wsapp.ws('/api/ws', require('../routes/ws'));
   wsapp.listen(8081, config.listen_address);

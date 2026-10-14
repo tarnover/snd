@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire').noCallThru();
 
 const storage = {
-  setField: sinon.stub()
+  setFields: sinon.stub()
 };
 
 function request(id, body) {
@@ -24,30 +24,32 @@ const passwordRoute = proxyquire('../../server/routes/password', {
 
 describe('/api/password', function() {
   afterEach(function() {
-    storage.setField.reset();
+    storage.setFields.reset();
   });
 
-  it('calls storage.setField with the correct parameter', function() {
+  it('sets password fields in one awaited operation', async function() {
     const req = request('x', { auth: 'z' });
     const res = response();
-    passwordRoute(req, res);
-    sinon.assert.calledWith(storage.setField, 'x', 'auth', 'z');
-    sinon.assert.calledWith(storage.setField, 'x', 'pwd', true);
+    await passwordRoute(req, res);
+    sinon.assert.calledWith(storage.setFields, 'x', {
+      auth: 'z',
+      pwd: true
+    });
     sinon.assert.calledWith(res.sendStatus, 200);
   });
 
-  it('sends a 400 if auth is missing', function() {
+  it('sends a 400 if auth is missing', async function() {
     const req = request('x', {});
     const res = response();
-    passwordRoute(req, res);
+    await passwordRoute(req, res);
     sinon.assert.calledWith(res.sendStatus, 400);
   });
 
-  it('sends a 404 on failure', function() {
-    storage.setField.throws(new Error());
+  it('sends a 404 on failure', async function() {
+    storage.setFields.rejects(new Error());
     const req = request('x', { auth: 'z' });
     const res = response();
-    passwordRoute(req, res);
+    await passwordRoute(req, res);
     sinon.assert.calledWith(res.sendStatus, 404);
   });
 });

@@ -1,6 +1,6 @@
 const storage = require('../storage');
 
-module.exports = function(req, res) {
+module.exports = async function(req, res) {
   const id = req.params.id;
   const auth = req.body.auth;
   if (!auth) {
@@ -8,8 +8,7 @@ module.exports = function(req, res) {
   }
 
   try {
-    storage.setField(id, 'auth', auth);
-    storage.setField(id, 'pwd', true);
+    await storage.setFields(id, { auth, pwd: true });
     res.sendStatus(200);
   } catch (e) {
     return res.sendStatus(404);

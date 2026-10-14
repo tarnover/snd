@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const storage = require('../storage');
 const config = require('../config');
 const fxa = require('../fxa');
+const security = require('../security');
 
 module.exports = {
   hmac: async function(req, res, next) {
@@ -15,6 +16,38 @@ module.exports = {
         if (!meta) {
           return res.sendStatus(404);
         }
+        let sourceRateKey;
+        if (meta.pwd) {
+          const source = security.requestSource(req);
+          sourceRateKey = source
+            ? `send:password-attempt:${id}:${source}`
+            : null;
+          const shareRateKey = `send:password-attempt:${id}:all`;
+          const checks = [
+            storage.claimRateLimit(
+              shareRateKey,
+              security.PASSWORD_ATTEMPTS_PER_SHARE,
+              security.PASSWORD_ATTEMPT_WINDOW_SECONDS
+            )
+          ];
+          if (sourceRateKey) {
+            checks.push(
+              storage.claimRateLimit(
+                sourceRateKey,
+                security.PASSWORD_ATTEMPTS_PER_SOURCE,
+                security.PASSWORD_ATTEMPT_WINDOW_SECONDS
+              )
+            );
+          }
+          const allowed = await Promise.all(checks);
+          if (!allowed.every(Boolean)) {
+            res.set(
+              'Retry-After',
+              String(security.PASSWORD_ATTEMPT_WINDOW_SECONDS)
+            );
+            return res.sendStatus(429);
+          }
+        }
         const hmac = crypto.createHmac(
           'sha256',
           Buffer.from(meta.auth, 'base64')
@@ -22,6 +55,9 @@ module.exports = {
         hmac.update(Buffer.from(meta.nonce, 'base64'));
         const verifyHash = hmac.digest();
         if (crypto.timingSafeEqual(verifyHash, Buffer.from(auth, 'base64'))) {
+          if (sourceRateKey) {
+            await storage.clearRateLimit(sourceRateKey);
+          }
           req.nonce = crypto.randomBytes(16).toString('base64');
           await storage.setField(id, 'nonce', req.nonce);
           res.set('WWW-Authenticate', `send-v1 ${req.nonce}`);

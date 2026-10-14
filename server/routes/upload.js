@@ -4,6 +4,8 @@ const config = require('../config');
 const mozlog = require('../log');
 const Limiter = require('../limiter');
 const { encryptedSize } = require('../../app/utils');
+const security = require('../security');
+const claimUpload = require('../uploadLimit');
 
 const log = mozlog('send.upload');
 
@@ -31,8 +33,22 @@ module.exports = async function(req, res) {
     nonce: crypto.randomBytes(16).toString('base64')
   };
 
+  let uploadTimer;
   try {
+    if (!(await claimUpload(req))) {
+      res.set('Retry-After', String(security.UPLOAD_RATE_WINDOW_SECONDS));
+      return res.sendStatus(429);
+    }
     const limiter = new Limiter(encryptedSize(config.max_file_size));
+    const abort = error => limiter.destroy(error);
+    req.once('aborted', () => abort(new Error('upload aborted')));
+    req.once('error', abort);
+    req.setTimeout(security.WS_IDLE_TIMEOUT_MS, () => {
+      req.destroy(new Error('upload idle timeout'));
+    });
+    uploadTimer = setTimeout(() => {
+      req.destroy(new Error('upload duration exceeded'));
+    }, security.WS_MAX_DURATION_MS);
     const fileStream = req.pipe(limiter);
     //this hasn't been updated to expiration time setting yet
     //if you want to fallback to this code add this
@@ -50,5 +66,7 @@ module.exports = async function(req, res) {
     }
     log.error('upload', e);
     res.sendStatus(500);
+  } finally {
+    clearTimeout(uploadTimer);
   }
 };

@@ -1,4 +1,5 @@
 const { Storage } = require('@google-cloud/storage');
+const { pipeline } = require('stream');
 const storage = new Storage();
 
 class GCSStorage {
@@ -9,7 +10,7 @@ class GCSStorage {
 
   async length(id) {
     const data = await this.bucket.file(id).getMetadata();
-    return data[0].size;
+    return Number(data[0].size);
   }
 
   getStream(id) {
@@ -18,20 +19,46 @@ class GCSStorage {
 
   set(id, file) {
     return new Promise((resolve, reject) => {
-      file
-        .pipe(
-          this.bucket.file(id).createWriteStream({
-            validation: false,
-            resumable: true
-          })
-        )
-        .on('error', reject)
-        .on('finish', resolve);
+      const destination = this.bucket.file(id).createWriteStream({
+        validation: false,
+        resumable: true
+      });
+      pipeline(file, destination, error => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
     });
   }
 
-  del(id) {
-    return this.bucket.file(id).delete();
+  async del(id) {
+    try {
+      await this.bucket.file(id).delete({ ignoreNotFound: true });
+    } catch (e) {
+      if (e.code !== 404) {
+        throw e;
+      }
+    }
+  }
+
+  async *list() {
+    let query = { autoPaginate: false };
+    while (query) {
+      const [files, nextQuery] = await this.bucket.getFiles(query);
+      for (const file of files) {
+        const metadata = file.metadata && file.metadata.size
+          ? file.metadata
+          : (await file.getMetadata())[0];
+        yield {
+          id: file.name,
+          size: Number(metadata.size),
+          createdAt: new Date(metadata.timeCreated || metadata.updated).getTime()
+        };
+      }
+      query = nextQuery || null;
+    }
   }
 
   ping() {

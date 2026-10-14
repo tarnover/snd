@@ -81,6 +81,7 @@ RUN set -x \
 RUN mkdir -p /app/.config/configstore
 RUN ln -s dist/version.json version.json
 
+ENV NODE_ENV=production
 ENV PORT=1443
 
 EXPOSE ${PORT}

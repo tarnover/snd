@@ -30,10 +30,35 @@ module.exports = function(config) {
   const client = redis.createClient(client_config);
 
   client.ttlAsync = promisify(client.ttl);
+  client.getAsync = promisify(client.get);
   client.hgetallAsync = promisify(client.hgetall);
   client.hgetAsync = promisify(client.hget);
   client.hsetAsync = promisify(client.hset);
+  client.hmsetAsync = promisify(client.hmset);
+  client.hdelAsync = promisify(client.hdel);
   client.hincrbyAsync = promisify(client.hincrby);
+  client.incrAsync = promisify(client.incr);
+  client.incrbyAsync = promisify(client.incrby);
+  client.decrbyAsync = promisify(client.decrby);
+  client.expireAsync = promisify(client.expire);
+  client.delAsync = promisify(client.del);
+  client.zaddAsync = promisify(client.zadd);
+  client.zremAsync = promisify(client.zrem);
+  client.zrangebyscoreAsync = promisify(client.zrangebyscore);
+  client.zscoreAsync = promisify(client.zscore);
+  client.evalAsync =
+    typeof client.eval === 'function' ? promisify(client.eval) : null;
+  client.isMock = redis_lib === 'redis-mock';
+  client.execMultiAsync = commands =>
+    new Promise((resolve, reject) => {
+      client.multi(commands).exec((err, replies) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(replies);
+        }
+      });
+    });
   client.pingAsync = promisify(client.ping);
   return client;
 };

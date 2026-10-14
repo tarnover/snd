@@ -1,13 +1,19 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
 const express = require('express');
 const path = require('path');
 const config = require('../config');
 const routes = require('../routes');
 const pages = require('../routes/pages');
-const expressWs = require('@dannycoates/express-ws');
+const configureWebSockets = require('../websocket');
 
 const app = express();
 
-expressWs(app, null, { perMessageDeflate: false });
+configureWebSockets(app, {
+  perMessageDeflate: false,
+  maxPayload: require('../security').WS_MAX_PAYLOAD_BYTES,
+  maxConnections: require('../security').WS_MAX_CONNECTIONS
+});
 routes(app);
 app.ws('/api/ws', require('../routes/ws'));
 

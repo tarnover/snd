@@ -17,7 +17,20 @@ function dosDateTime(dateTime = new Date()) {
 
 class File {
   constructor(info) {
+    if (
+      !info ||
+      typeof info.name !== 'string' ||
+      info.name.length === 0 ||
+      !Number.isSafeInteger(info.size) ||
+      info.size < 0 ||
+      info.size > 0xffffffff
+    ) {
+      throw new Error('invalid archive entry');
+    }
     this.name = encoder.encode(info.name);
+    if (this.name.byteLength > 1024) {
+      throw new Error('invalid archive entry name');
+    }
     this.size = info.size;
     this.bytesRead = 0;
     this.crc = null;
@@ -138,35 +151,45 @@ class ZipStreamController {
   }
 
   async pull(controller) {
-    if (!this.file) {
-      // end of archive
-      centralDirectory(this.files, controller);
-      return controller.close();
-    }
-    if (this.file.bytesRead === 0) {
-      // beginning of file
-      controller.enqueue(this.file.header);
-      if (this.extra) {
-        this.extra = this.file.append(this.extra, controller);
+    while (this.file) {
+      if (this.file.bytesRead === 0) {
+        // beginning of file
+        controller.enqueue(this.file.header);
+        if (this.extra) {
+          this.extra = this.file.append(this.extra, controller);
+        }
       }
+      if (this.file.bytesRead >= this.file.size) {
+        // end of file
+        controller.enqueue(this.file.dataDescriptor);
+        this.nextFile();
+        continue;
+      }
+      const data = await this.reader.read();
+      if (data.done) {
+        throw new Error('archive data is shorter than its manifest');
+      }
+      this.extra = this.file.append(data.value, controller);
+      return;
     }
-    if (this.file.bytesRead >= this.file.size) {
-      // end of file
-      controller.enqueue(this.file.dataDescriptor);
-      this.nextFile();
-      return this.pull(controller);
+    if (this.extra && this.extra.byteLength > 0) {
+      throw new Error('archive data is longer than its manifest');
     }
-    const data = await this.reader.read();
-    if (data.done) {
-      this.nextFile();
-      return this.pull(controller);
-    }
-    this.extra = this.file.append(data.value, controller);
+    // end of archive
+    centralDirectory(this.files, controller);
+    controller.close();
   }
 }
 
 export default class Zip {
   constructor(manifest, source) {
+    if (
+      !manifest ||
+      !Array.isArray(manifest.files) ||
+      manifest.files.length > 65535
+    ) {
+      throw new Error('invalid archive manifest');
+    }
     this.files = manifest.files.map(info => new File(info));
     this.source = source;
   }

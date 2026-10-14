@@ -4,13 +4,16 @@ const proxyquire = require('proxyquire').noCallThru();
 
 const storage = {
   metadata: sinon.stub(),
-  setField: sinon.stub()
+  setField: sinon.stub(),
+  claimRateLimit: sinon.stub(),
+  clearRateLimit: sinon.stub()
 };
 
 function request(id, auth) {
   return {
     params: { id },
-    header: sinon.stub().returns(auth)
+    header: sinon.stub().returns(auth),
+    socket: { remoteAddress: '127.0.0.1' }
   };
 }
 
@@ -37,6 +40,8 @@ describe('Owner Middleware', function() {
   afterEach(function() {
     storage.metadata.reset();
     storage.setField.reset();
+    storage.claimRateLimit.reset();
+    storage.clearRateLimit.reset();
     next.reset();
   });
 
@@ -100,6 +105,18 @@ describe('Owner Middleware', function() {
       'WWW-Authenticate',
       `send-v1 ${storedMeta.nonce}`
     );
+    sinon.assert.notCalled(next);
+  });
+
+  it('rate limits password-protected shares before checking the HMAC', async function() {
+    storage.metadata.returns(Promise.resolve({ ...storedMeta, pwd: true }));
+    storage.claimRateLimit.onFirstCall().resolves(false);
+    storage.claimRateLimit.onSecondCall().resolves(true);
+    const req = request('x', 'send-v1 invalid');
+    const res = response();
+    await authMiddleware(req, res, next);
+    sinon.assert.calledWith(res.sendStatus, 429);
+    sinon.assert.calledWith(res.set, 'Retry-After');
     sinon.assert.notCalled(next);
   });
 });

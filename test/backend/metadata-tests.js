@@ -46,6 +46,7 @@ describe('/api/metadata', function() {
 
   it('returns a json object', async function() {
     storage.ttl.returns(Promise.resolve(123));
+    storage.length.returns(Promise.resolve(456));
     const meta = {
       dlimit: 1,
       dl: 0,
@@ -55,6 +56,7 @@ describe('/api/metadata', function() {
     await metadataRoute(request('x', meta), res);
     sinon.assert.calledWithMatch(res.send, {
       metadata: 'foo',
+      size: 456,
       finalDownload: true,
       ttl: 123
     });

@@ -129,6 +129,7 @@ export async function metadata(id, keychain) {
     const meta = await keychain.decryptMetadata(b64ToArray(data.metadata));
     return {
       size: meta.size,
+      ciphertextSize: data.size,
       ttl: data.ttl,
       iv: meta.iv,
       name: meta.name,

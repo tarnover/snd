@@ -4,6 +4,9 @@ import { delay, bytes, streamToArrayBuffer } from './utils';
 import { downloadFile, metadata, getApiUrl } from './api';
 import { blobStream } from './streams';
 import Zip from './zip';
+import { validateFileMetadata } from './fileMetadata';
+
+/* global LIMITS */
 
 export default class FileReceiver extends Nanobus {
   constructor(fileInfo) {
@@ -44,7 +47,12 @@ export default class FileReceiver extends Nanobus {
   }
 
   async getMetadata() {
-    const meta = await metadata(this.fileInfo.id, this.keychain);
+    const response = await metadata(this.fileInfo.id, this.keychain);
+    const meta = validateFileMetadata(
+      response,
+      response.ciphertextSize,
+      LIMITS
+    );
     this.fileInfo.name = meta.name;
     this.fileInfo.type = meta.type;
     this.fileInfo.iv = meta.iv;
