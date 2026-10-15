@@ -8,10 +8,14 @@ const path = require('path');
 
 module.exports = async function(req) {
   const locale = (() => {
-    if (config.custom_locale != '' && fs.existsSync(path.join(__dirname,'../public/locales',config.custom_locale))) {
-        return config.custom_locale;
-    }
-    else {
+    if (
+      config.custom_locale != '' &&
+      fs.existsSync(
+        path.join(__dirname, '../public/locales', config.custom_locale)
+      )
+    ) {
+      return config.custom_locale;
+    } else {
       return req.language || 'en-US';
     }
   })();
@@ -28,10 +32,6 @@ module.exports = async function(req) {
     } catch (e) {
       // continue without accounts
     }
-  }
-  const prefs = {};
-  if (config.survey_url) {
-    prefs.surveyUrl = config.survey_url;
   }
   const baseUrl = config.deriveBaseUrl(req);
   const uiAssets = {
@@ -76,7 +76,6 @@ module.exports = async function(req) {
     user: { avatar: assets.get('user.svg'), loggedIn: false },
     robots,
     authConfig,
-    prefs,
     layout
   };
 };

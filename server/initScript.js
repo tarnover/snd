@@ -7,25 +7,10 @@ module.exports = function(state) {
     ? `var AUTH_CONFIG = ${JSON.stringify(state.authConfig)};`
     : '';
 
-  /* eslint-disable no-useless-escape */
   const jsconfig = `
-  var isIE = /trident\\\/7\.|msie/i.test(navigator.userAgent);
-  var isUnsupportedPage = /\\\/unsupported/.test(location.pathname);
-  if (isIE && !isUnsupportedPage) {
-    window.location.assign('/unsupported/ie');
-  }
-  if (
-    // Firefox < 50
-    /firefox/i.test(navigator.userAgent) &&
-    parseInt(navigator.userAgent.match(/firefox\\/*([^\\n\\r]*)\./i)[1], 10) < 50
-  ) {
-    window.location.assign('/unsupported/outdated');
-  }
-
   var LIMITS = ${JSON.stringify(clientConstants.LIMITS)};
   var WEB_UI = ${JSON.stringify(clientConstants.WEB_UI)};
   var DEFAULTS = ${JSON.stringify(clientConstants.DEFAULTS)};
-  var PREFS = ${JSON.stringify(state.prefs)};
   var downloadMetadata = ${
     state.downloadMetadata ? raw(JSON.stringify(state.downloadMetadata)) : '{}'
   };

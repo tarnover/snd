@@ -1,7 +1,6 @@
 const crypto = require('crypto');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const uaparser = require('ua-parser-js');
 const storage = require('../storage');
 const config = require('../config');
 const auth = require('../middleware/auth');
@@ -22,10 +21,6 @@ module.exports = function(app) {
       force: !IS_DEV
     })
   );
-  app.use(function(req, res, next) {
-    req.ua = uaparser(req.header('user-agent'));
-    next();
-  });
   app.use(function(req, res, next) {
     req.cspNonce = crypto.randomBytes(16).toString('hex');
     next();

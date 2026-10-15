@@ -219,11 +219,6 @@ const conf = convict({
     default: '',
     env: 'FXA_CSP_PROFILEIMAGE_URL'
   },
-  survey_url: {
-    format: String,
-    default: '',
-    env: 'SURVEY_URL'
-  },
   ip_db: {
     format: String,
     default: '',

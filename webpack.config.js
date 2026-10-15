@@ -11,9 +11,7 @@ const webJsOptions = {
     [
       '@babel/preset-env',
       {
-        bugfixes: true,
-        useBuiltIns: 'entry',
-        corejs: 3
+        bugfixes: true
       }
     ]
   ],
@@ -116,12 +114,7 @@ const web = {
               path.resolve(__dirname, 'common'),
               // some dependencies need to get re-babeled because we
               // have different targets than their default configs
-              path.resolve(
-                __dirname,
-                'node_modules/@dannycoates/webcrypto-liner'
-              ),
-              path.resolve(__dirname, 'node_modules/@fluent'),
-              path.resolve(__dirname, 'node_modules/intl-pluralrules')
+              path.resolve(__dirname, 'node_modules/@fluent')
             ],
             options: webJsOptions
           },
@@ -131,8 +124,7 @@ const web = {
             exclude: [
               path.resolve(__dirname, 'node_modules/crc'),
               path.resolve(__dirname, 'node_modules/@fluent'),
-              path.resolve(__dirname, 'node_modules/tslib'),
-              path.resolve(__dirname, 'node_modules/webcrypto-core')
+              path.resolve(__dirname, 'node_modules/tslib')
             ],
             loader: 'webpack-unassert-loader'
           }
@@ -225,8 +217,7 @@ const web = {
     new webpack.IgnorePlugin({ resourceRegExp: /\.\.\/dist/ }), // used in common/*.js
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
-      // assert polyfill (test bundle) needs process; require.resolve so
-      // .mjs deps (asmcrypto) get a fully-specified path
+      // assert polyfill (test bundle) needs process
       process: require.resolve('process/browser')
     }),
     new MiniCssExtractPlugin({

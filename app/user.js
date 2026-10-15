@@ -44,14 +44,6 @@ export default class User {
     this.storage.set('firstAction', action);
   }
 
-  get surveyed() {
-    return this.storage.get('surveyed');
-  }
-
-  set surveyed(yes) {
-    this.storage.set('surveyed', yes);
-  }
-
   get avatar() {
     const defaultAvatar = assets.get('user.svg');
     if (this.info.avatarDefault) {

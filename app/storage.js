@@ -85,16 +85,6 @@ class Storage {
   set referrer(str) {
     this.engine.setItem('referrer', str);
   }
-  get enrolled() {
-    return JSON.parse(this.engine.getItem('ab_experiments') || '{}');
-  }
-
-  enroll(id, variant) {
-    const enrolled = {};
-    enrolled[id] = variant;
-    this.engine.setItem('ab_experiments', JSON.stringify(enrolled));
-  }
-
   get files() {
     return Array.from(this._files.values()).sort(
       (a, b) => a.createdAt - b.createdAt

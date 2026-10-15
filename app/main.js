@@ -1,7 +1,4 @@
-/* global DEFAULTS LIMITS WEB_UI PREFS */
-import 'core-js';
-import 'fast-text-encoding'; // MS Edge support
-import 'intl-pluralrules';
+/* global DEFAULTS LIMITS WEB_UI */
 import choo from 'choo';
 import nanotiming from 'nanotiming';
 import routes from './routes';
@@ -10,7 +7,6 @@ import controller from './controller';
 import dragManager from './dragManager';
 import pasteManager from './pasteManager';
 import storage from './storage';
-import experiments from './experiments';
 import './jetbrains-mono.css';
 import './main.css';
 import User from './user';
@@ -47,7 +43,6 @@ if (process.env.NODE_ENV === 'production') {
     LIMITS,
     DEFAULTS,
     WEB_UI,
-    PREFS,
     archive: new Archive([], DEFAULTS.EXPIRE_SECONDS, DEFAULTS.DOWNLOADS),
     capabilities,
     translate,
@@ -61,7 +56,6 @@ if (process.env.NODE_ENV === 'production') {
   const app = routes(choo({ hash: true }));
   // eslint-disable-next-line require-atomic-updates
   window.app = app;
-  app.use(experiments);
   app.use(controller);
   app.use(dragManager);
   app.use(pasteManager);

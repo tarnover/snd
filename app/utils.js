@@ -5,32 +5,26 @@ try {
 } catch (e) {
   // running in the service worker
 }
-const b64 = require('base64-js');
-
 function arrayToB64(array) {
-  return b64
-    .fromByteArray(array)
+  let bin = '';
+  for (let i = 0; i < array.length; i++) {
+    bin += String.fromCharCode(array[i]);
+  }
+  return btoa(bin)
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=/g, '');
 }
 
 function b64ToArray(str) {
-  return b64.toByteArray(str + '==='.slice((str.length + 3) % 4));
+  str =
+    str.replace(/-/g, '+').replace(/_/g, '/') +
+    '==='.slice((str.length + 3) % 4);
+  return Uint8Array.from(atob(str), c => c.charCodeAt(0));
 }
 
 function locale() {
   return document.querySelector('html').lang;
-}
-
-function loadShim(polyfill) {
-  return new Promise((resolve, reject) => {
-    const shim = document.createElement('script');
-    shim.src = polyfill;
-    shim.addEventListener('load', () => resolve(true));
-    shim.addEventListener('error', () => resolve(false));
-    document.head.appendChild(shim);
-  });
 }
 
 function isFile(id) {
@@ -38,32 +32,31 @@ function isFile(id) {
 }
 
 function copyToClipboard(str) {
+  // navigator.clipboard only exists in secure contexts; plain-HTTP self-hosts
+  // fall back to execCommand, which still works there.
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(str).catch(() => execCopy(str));
+    return true;
+  }
+  return execCopy(str);
+}
+
+function execCopy(str) {
   const aux = document.createElement('input');
-  aux.setAttribute('value', str);
-  aux.contentEditable = true;
+  aux.value = str;
   aux.readOnly = true;
   document.body.appendChild(aux);
-  if (navigator.userAgent.match(/iphone|ipad|ipod/i)) {
-    const range = document.createRange();
-    range.selectNodeContents(aux);
-    const sel = getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-    aux.setSelectionRange(0, str.length);
-  } else {
-    aux.select();
+  aux.select();
+  aux.setSelectionRange(0, str.length); // iOS ignores select()
+  let result = false;
+  try {
+    result = document.execCommand('copy');
+  } catch (e) {
+    // unsupported
   }
-  const result = document.execCommand('copy');
   document.body.removeChild(aux);
   return result;
 }
-
-const LOCALIZE_NUMBERS = !!(
-  typeof Intl === 'object' &&
-  Intl &&
-  typeof Intl.NumberFormat === 'function' &&
-  typeof navigator === 'object'
-);
 
 const UNITS = ['bytes', 'kb', 'mb', 'gb'];
 function bytes(num) {
@@ -74,15 +67,13 @@ function bytes(num) {
   const n = Number(num / Math.pow(1024, exponent));
   const decimalDigits = Math.floor(n) === n ? 0 : 1;
   let nStr = n.toFixed(decimalDigits);
-  if (LOCALIZE_NUMBERS) {
-    try {
-      nStr = n.toLocaleString(locale(), {
-        minimumFractionDigits: decimalDigits,
-        maximumFractionDigits: decimalDigits
-      });
-    } catch (e) {
-      // fall through
-    }
+  try {
+    nStr = n.toLocaleString(locale(), {
+      minimumFractionDigits: decimalDigits,
+      maximumFractionDigits: decimalDigits
+    });
+  } catch (e) {
+    // no document (service worker); keep toFixed
   }
   return translate('fileSize', {
     num: nStr,
@@ -91,26 +82,19 @@ function bytes(num) {
 }
 
 function percent(ratio) {
-  if (LOCALIZE_NUMBERS) {
-    try {
-      return ratio.toLocaleString(locale(), { style: 'percent' });
-    } catch (e) {
-      // fall through
-    }
+  try {
+    return ratio.toLocaleString(locale(), { style: 'percent' });
+  } catch (e) {
+    return `${Math.floor(ratio * 100)}%`;
   }
-  return `${Math.floor(ratio * 100)}%`;
 }
 
 function number(n) {
-  if (LOCALIZE_NUMBERS) {
+  try {
     return n.toLocaleString(locale());
+  } catch (e) {
+    return n.toString();
   }
-  return n.toString();
-}
-
-function allowedCopy() {
-  const support = !!document.queryCommandSupported;
-  return support ? document.queryCommandSupported('copy') : false;
 }
 
 function delay(delay = 100) {
@@ -168,32 +152,16 @@ function browserName() {
 }
 
 async function streamToArrayBuffer(stream, size) {
+  if (!size) {
+    return new Response(stream).arrayBuffer();
+  }
+  // known size: write into one buffer to avoid holding chunks + copy (2x peak)
+  const result = new Uint8Array(size);
   const reader = stream.getReader();
-  let state = await reader.read();
-
-  if (size) {
-    const result = new Uint8Array(size);
-    let offset = 0;
-    while (!state.done) {
-      result.set(state.value, offset);
-      offset += state.value.length;
-      state = await reader.read();
-    }
-    return result.buffer;
-  }
-
-  const parts = [];
-  let len = 0;
-  while (!state.done) {
-    parts.push(state.value);
-    len += state.value.length;
-    state = await reader.read();
-  }
   let offset = 0;
-  const result = new Uint8Array(len);
-  for (const part of parts) {
-    result.set(part, offset);
-    offset += part.length;
+  for (let s = await reader.read(); !s.done; s = await reader.read()) {
+    result.set(s.value, offset);
+    offset += s.value.length;
   }
   return result.buffer;
 }
@@ -277,14 +245,12 @@ module.exports = {
   locale,
   fadeOut,
   delay,
-  allowedCopy,
   bytes,
   percent,
   number,
   copyToClipboard,
   arrayToB64,
   b64ToArray,
-  loadShim,
   isFile,
   openLinksInNewTab,
   browserName,

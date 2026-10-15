@@ -6,8 +6,7 @@ import howItWorksDialog from './ui/howItWorksDialog';
 import okDialog from './ui/okDialog';
 import shareDialog from './ui/shareDialog';
 import signupDialog from './ui/signupDialog';
-import surveyDialog from './ui/surveyDialog';
-import { bytes, locale } from './utils';
+import { bytes } from './utils';
 import { copyToClipboard, delay, openLinksInNewTab, percent } from './utils';
 
 export default function(state, emitter) {
@@ -271,18 +270,7 @@ export default function(state, emitter) {
   });
 
   emitter.on('closeModal', () => {
-    if (
-      state.PREFS.surveyUrl &&
-      ['copy', 'share'].includes(state.modal.type) &&
-      locale().startsWith('en') &&
-      (state.storage.totalUploads > 1 || state.storage.totalDownloads > 0) &&
-      !state.user.surveyed
-    ) {
-      state.user.surveyed = true;
-      state.modal = surveyDialog();
-    } else {
-      state.modal = null;
-    }
+    state.modal = null;
     render();
   });
 
